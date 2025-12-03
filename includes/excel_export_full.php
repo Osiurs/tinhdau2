@@ -620,9 +620,9 @@ function createDAUTONSheet($spreadsheet, $templatePath, $rowsInGroup, $currentMo
                 $ngayCapThem = !empty($row['ngay_di']) ? format_date_vn($row['ngay_di']) : '';
                 $sheet->setCellValueByColumnAndRow(16,$currentRow,$ngayCapThem); // NGÀY ĐI cột P (16)
                 setIntHelper($sheet,15,$currentRow,$litInt); // DẦU SD cột O (15)
-                // Cấp thêm không có cự ly → Không gán vào các cột V,W,X (<80, 80-200, >200)
-                // Chỉ cộng vào tổng dầu sử dụng thôi
+                // Cấp thêm mặc định 0km → Ghi vào cột <80km (cột V, index 22)
                 $subtotal[15]+=$litInt; // DẦU SD index (cột O)
+                $subtotal[22]+=$litInt; // Cộng vào bucket <80km (cột V) vì cấp thêm mặc định 0km
                 $sheet->getStyle("A{$currentRow}:X{$currentRow}")->applyFromArray($defaultCellStyle);
                 $currentRow++;
                 continue;

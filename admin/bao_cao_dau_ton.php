@@ -84,7 +84,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'excel') {
                     $soDuDauKy = $dauTon->tinhSoDu($tenTau, $ngayDauThang);
                 }
                 
-                // Tính dầu cấp trong tháng (chỉ cap_them + tinh_chinh thông thường)
+                // Tính dầu cấp trong tháng (chỉ cap_them, KHÔNG tính tinh_chinh)
                 $dauCap = 0;
                 $lichSuGiaoDich = $dauTon->getLichSuGiaoDich($tenTau);
                 foreach ($lichSuGiaoDich as $giaoDich) {
@@ -92,20 +92,8 @@ if (isset($_GET['export']) && $_GET['export'] === 'excel') {
                     if ($ngayGiaoDich >= $ngayDauThang && $ngayGiaoDich <= $ngayCuoiThang) {
                         if ($giaoDich['loai'] === 'cap_them') {
                             $dauCap += (float)($giaoDich['so_luong_lit'] ?? 0);
-                        } elseif ($giaoDich['loai'] === 'tinh_chinh') {
-                            $amount = (float)($giaoDich['so_luong_lit'] ?? 0);
-                            $lyDo = (string)($giaoDich['ly_do'] ?? '');
-                            
-                            // Chỉ tính tinh_chinh thông thường, không tính chuyển dầu
-                            $isChuyenDau = (
-                                strpos($lyDo, 'chuyển sang') !== false || 
-                                strpos($lyDo, 'nhận từ') !== false ||
-                                preg_match('/→\s*chuyển\s+sang|←\s*nhận\s+từ/u', $lyDo)
-                            );
-                            if (!$isChuyenDau) {
-                                $dauCap += $amount;
-                            }
                         }
+                        // BỎ TINH CHỈNH: Không tính tinh_chinh vào báo cáo CT nữa
                     }
                 }
                 
@@ -739,7 +727,7 @@ function tinhDuLieuTheoThangTatCaWeb($danhSachTau, $nam, $denNgay, $dauTon, $ket
                 $soDuDauKy = $dauTon->tinhSoDu($tenTau, $ngayDauThang);
             }
             
-                // Tính dầu cấp trong tháng (chỉ cap_them + tinh_chinh thông thường)
+                // Tính dầu cấp trong tháng (chỉ cap_them, KHÔNG tính tinh_chinh)
                 $dauCap = 0;
                 $giaoDichThang = $dauTon->getLichSuGiaoDich($tenTau);
                 foreach ($giaoDichThang as $gd) {
@@ -747,20 +735,8 @@ function tinhDuLieuTheoThangTatCaWeb($danhSachTau, $nam, $denNgay, $dauTon, $ket
                     if ($ngayGiaoDich >= $ngayDauThang && $ngayGiaoDich <= $ngayCuoiThang) {
                         if ($gd['loai'] === 'cap_them' && (float)($gd['so_luong_lit'] ?? 0) > 0) {
                             $dauCap += (float)$gd['so_luong_lit'];
-                        } elseif ($gd['loai'] === 'tinh_chinh') {
-                            $amount = (float)($gd['so_luong_lit'] ?? 0);
-                            $lyDo = (string)($gd['ly_do'] ?? '');
-                            
-                            // Chỉ tính tinh_chinh thông thường, không tính chuyển dầu
-                            $isChuyenDau = (
-                                strpos($lyDo, 'chuyển sang') !== false || 
-                                strpos($lyDo, 'nhận từ') !== false ||
-                                preg_match('/→\s*chuyển\s+sang|←\s*nhận\s+từ/u', $lyDo)
-                            );
-                            if (!$isChuyenDau) {
-                                $dauCap += $amount;
-                            }
                         }
+                        // BỎ TINH CHỈNH: Không tính tinh_chinh vào báo cáo CT nữa
                     }
                 }
             
