@@ -4038,6 +4038,9 @@ document.addEventListener('DOMContentLoaded', function(){
       html += '  </label>';
       html += '  <div class="input-group">';
       html += '    <input type="text" class="form-control form-control-sm" value="' + escapeHtml(displayName) + '" readonly>';
+      html += '    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="editNewDestination(' + index + ')" title="Sửa điểm này">';
+      html += '      <i class="fas fa-edit"></i>';
+      html += '    </button>';
       html += '    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeNewDestination(' + index + ')" title="Xóa điểm này">';
       html += '      <i class="fas fa-trash"></i>';
       html += '    </button>';
@@ -4271,6 +4274,87 @@ document.addEventListener('DOMContentLoaded', function(){
     updateRouteHiddenInputs();
 
     renderRouteUI();
+  };
+
+  // Edit new destination point (C, D, E...)
+  // Hiển thị form sửa điểm tại index
+  window.editNewDestination = function(index) {
+    var point = routeState.newDestinations[index];
+    if (!point) return;
+
+    var form = document.getElementById('add_new_destination_form');
+    if (!form) return;
+
+    // Hiển thị form
+    form.style.display = 'block';
+
+    // Điền dữ liệu vào form
+    var nameInput = document.getElementById('new_destination_point_name');
+    var reasonInput = document.getElementById('new_destination_point_reason');
+
+    if (nameInput) {
+      nameInput.value = point.name;
+      nameInput.readOnly = false;
+      nameInput.classList.remove('bg-light');
+    }
+
+    if (reasonInput) {
+      reasonInput.value = point.reason || '';
+    }
+
+    // Thay đổi nút "Thêm" thành "Cập nhật"
+    var btnAdd = document.querySelector('#add_new_destination_form button[onclick="addNewDestination()"]');
+    if (btnAdd) {
+      btnAdd.textContent = 'Cập nhật';
+      btnAdd.setAttribute('onclick', 'updateNewDestination(' + index + ')');
+    }
+  };
+
+  // Update new destination point (C, D, E...)
+  // Cập nhật điểm tại index sau khi sửa
+  window.updateNewDestination = function(index) {
+    var nameInput = document.getElementById('new_destination_point_name');
+    var reasonInput = document.getElementById('new_destination_point_reason');
+
+    var name = nameInput.value.trim();
+    var reason = reasonInput.value.trim();
+
+    if (!name) {
+      alert('Vui lòng nhập tên điểm!');
+      nameInput.focus();
+      return;
+    }
+
+    if (!reason) {
+      alert('Vui lòng nhập lý do thêm điểm này!');
+      reasonInput.focus();
+      return;
+    }
+
+    // Cập nhật điểm tại index
+    routeState.newDestinations[index] = {
+      name: name,
+      reason: reason,
+      note: routeState.newDestinations[index].note || ''
+    };
+
+    // Update hidden inputs
+    updateRouteHiddenInputs();
+
+    // Re-render UI
+    renderRouteUI();
+
+    // Hide form và reset nút về trạng thái "Thêm"
+    var form = document.getElementById('add_new_destination_form');
+    if (form) {
+      form.style.display = 'none';
+    }
+
+    var btnAdd = document.querySelector('#add_new_destination_form button');
+    if (btnAdd) {
+      btnAdd.textContent = 'Thêm điểm';
+      btnAdd.setAttribute('onclick', 'addNewDestination()');
+    }
   };
 
   // Delete endpoint (the current last point in newDestinations)
