@@ -1,0 +1,99 @@
+﻿id_diem,ten_diem,ma_diem,tinh_thanh,loai_diem
+1,"Badico (BD)",B,BD,khac
+2,"BMT - Cần Thơ (Thốt Nốt)",B-CTN,"Thốt Nốt",khac
+3,"BMT Cần Thơ (Cái Cui)",BCTC,"Cái Cui",khac
+4,"BMT Long An",BLA,,khac
+5,"Bình Minh (Vĩnh Long)",BML,"Vĩnh Long",khac
+6,"C.An Sơn",CS1,,khac
+7,"Cảng AHT (Bình Dương)",CAD,"Bình Dương",khac
+8,"Cảng Bảo Thy (BD)",CBT,BD,khac
+9,"Cảng Bảo Toàn",CBT1,,khac
+10,"Cảng Hoàng Sơn Lâm (VC-ĐT)",CHSL,VC-ĐT,khac
+11,"Cảng Hoàng Tuấn (Long An)",CHTA,"Long An",khac
+12,"Cảng Long Bình (ĐN)",CLB,ĐN,khac
+13,"Cảng Ngọc Bích (Long An)",CNBA,"Long An",khac
+14,"Cảng Nhất Nam (ĐN)",CNN,ĐN,khac
+15,"Cảng Phú Quang",CPQ,,khac
+16,"Cảng Thiện Tân (BD)",CTT,BD,khac
+17,"Cảng Thành Tây Hạ (ĐN)",CTTH,ĐN,khac
+18,"Cảng Thành Được (BD)",CT�,BD,khac
+19,"Cảng Thạnh Phước",CTP,,khac
+20,"Cái Sắn(CT)",CS,CT,khac
+21,"Cầu Long Thành",CLT2,,khac
+22,"Cảng An Ngãi (BRVT)",CAN,BRVT,cang
+23,"Cảng Bourbon (Long An)",CBA,"Long An",cang
+24,"Cảng Bảo Mai (Đồng Tháp)",CBMT1,"Đồng Tháp",cang
+25,"Cảng Bảo Minh Thịnh (ĐN)",CBMT,ĐN,cang
+26,"Cảng Bến Lức (Long An)",CBLA,"Long An",cang
+27,"Cảng Bến Nghé",CBN,,cang
+28,"Cảng Bến Nghé-> Phú Hữu (Lãnh vật tư)",CBNPHVT,"Lãnh vật tư",cang
+29,"Cảng Bờ Sông AHT (ST)",CBSA,ST,cang
+30,"Cảng Cái Cui (CT)",CCC,CT,cang
+31,"Cảng Hiệp Phước",CHP,,cang
+32,"Cảng Hoàng Diệu (CT)",CHD,CT,cang
+33,"Cảng Long Hậu (Long An)",CLHA,"Long An",cang
+34,"Cảng Long Thuận (ĐN)",CLT,ĐN,cang
+35,"Cảng Long Tân (ĐN)",CLT1,ĐN,cang
+36,"Cảng Lotus",CL,,cang
+37,"Cảng Mỹ Xuyên (ST)",CMX,ST,cang
+38,"Cảng Ngã Bảy (HG)",CNB,HG,cang
+39,"Cảng Phan Vũ (Long An)",CPVA,"Long An",cang
+40,"Cảng Phú Mỹ",CPM,,cang
+41,"Cảng Quốc Hằng (ĐN)",CQH,ĐN,cang
+42,"Cảng Rạch Chiếc",CRC,,cang
+43,"Cảng Rạch Giá (KG)",CRG,KG,cang
+44,"Cảng SITV(Thị Vải)",CSV,"Thị Vải",cang
+45,"Cảng Sotrans Thủ Đức",CST�,,cang
+46,"Cảng Sông Buôn (ĐN)",CSB,ĐN,cang
+47,"Cảng Thường Tân (BD)",CTT1,BD,cang
+48,"Cảng Thốt Nốt (CT)",CTN,CT,cang
+49,"Cảng TMN (Phú Mỹ)",CTM,"Phú Mỹ",cang
+50,"Cảng Tuệ Minh (Thường Tân)",CTMT,"Thường Tân",cang
+51,"Cảng TVP (Thị Vải)",CTV,"Thị Vải",cang
+52,"Cảng Tân Thuận 1",CTT11,,cang
+53,"Cảng Tổng Hợp Thị Vải",CTHTV,,cang
+54,"Cảng Đăng Diệp (ĐN)",C�D,ĐN,cang
+55,"Cẩm Phả (Thị Vải)",CPV,"Thị Vải",khac
+56,"DC (Bình Đức-Long An)",D�A,"Bình Đức-Long An",khac
+57,"Fico Hiệp Phước",FHP,,kho
+58,"Fico Tây Ninh",FTN,,kho
+59,"Insee Hiệp Phước",IHP,,khac
+60,"Insee Hòn Chông",IHC,,khac
+61,"Insee Thị Vải",ITV,,khac
+62,"Măng Thít (Vĩnh Long)",MTL,"Vĩnh Long",khac
+63,"Nhà máy xi măng Kiên Lương",NMXMKL,,nha_may
+64,"NM Nhiệt điện SH (HG)",NN�S,HG,khac
+65,"Phao BP01 (Gò Gia)",PBG2,"Gò Gia",phao
+66,"Phao BP02 (Gò Gia)",PBG6,"Gò Gia",phao
+67,"Phao BP04 (Gò Gia)",PBG4,"Gò Gia",phao
+68,"Phao BP08 (Gò Gia)",PBG5,"Gò Gia",phao
+69,"Phao BP09 (Gò Gia)",PBG1,"Gò Gia",phao
+70,"Phao BP12 (Nhà Bè)",PBB,"Nhà Bè",phao
+71,"Phao BP15 (Gò Gia)",PBG3,"Gò Gia",phao
+72,"Phao BP4 (Gò Gia)",PBG,"Gò Gia",phao
+73,"Phao Gò Gia",PGG,,phao
+74,"Phao HL4 (NB)",PH,NB,phao
+75,"Phao ITC (Gò Gia)",PIG,"Gò Gia",phao
+76,"Phao PL4 (NB)",PP,NB,phao
+77,"Phao Thiềng Liềng",PTL,,phao
+78,"Phao ĐT1 (Cát Lái)",P�L,"Cát Lái",phao
+79,"Quảng Xuyên",QX,,khac
+80,"TGN Dầu tiếng (BD)",TDT,BD,khac
+81,"TN Long An",TLA,,cang
+82,"TN Phú Hữu",TPH,,cang
+83,"Tuấn An Phú (BD)",TAP,BD,khac
+84,"Tân Uyên (BD)",TU,BD,khac
+85,"Vàm Láng",VL,,khac
+86,"Vĩnh Xương (AG)",VX,AG,khac
+87,"Vĩnh Xương( AG)",VXA," AG",khac
+88,"XM Con Gà",XCG,,nha_may
+89,"XM Cá Sấu",XCS,,nha_may
+90,"XM Công Thanh (ĐN)",XCT,ĐN,nha_may
+91,"XM Hạ Long (HP)",XHL,HP,nha_may
+92,"XM Đồng Tâm (TG)",X�T,TG,nha_may
+93,XMKL,X,,khac
+94,"Ụ Minh Tâm",�MT,,khac
+95,"Ụ Thiện Chiến (Bến Tre)",�TCT,"Bến Tre",khac
+96,"Ụ Trí Nguyễn",�TN,,khac
+97,"Ụ Việt Long (Long An)",�VLA,"Long An",khac
+98,"Ụ Đại Nam (Long An)",��NA,"Long An",khac

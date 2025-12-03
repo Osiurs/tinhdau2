@@ -1,0 +1,5 @@
+id,ten_phuong_tien,loai,ngay,so_luong_lit,cay_xang,ly_do,transfer_pair_id,created_at
+7a3b26c7-355d-4f72-984d-94791891ca5f,HTL-2,tinh_chinh,2025-10-31,5000,,,,"2025-11-20 10:29:36"
+9db96b25-c2e0-467d-99a8-116a300e3632,HTL-1,tinh_chinh,2025-12-02,7000,,,,"2025-12-03 07:06:15"
+038e8448-4209-46f2-80bb-0a29051cf1f2,HTL-1,tinh_chinh,2025-12-02,-500,,"Chuyển dầu → chuyển sang HTL-2",7742d7d8-a88d-45d6-9c97-2df4d37c04bc,"2025-12-03 07:11:34"
+54f7a5b8-e0e5-4563-a459-94ad7e0c8c5d,HTL-2,tinh_chinh,2025-12-02,500,,"Chuyển dầu ← nhận từ HTL-1",7742d7d8-a88d-45d6-9c97-2df4d37c04bc,"2025-12-03 07:11:34"

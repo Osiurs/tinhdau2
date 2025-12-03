@@ -1,0 +1,53 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+*.log
+debug_log.txt
+error_log.txt
+
+# Database
+*.db
+*.sqlite
+*.sql
+
+# Environment files
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.cache
+tmp/
+temp/
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# MacOS
+.DS_Store
+
+# Backup files
+backup/
+*.bak
+*.backup
+
+# CSV data files (nếu không muốn push dữ liệu)
+# data/*.csv
+
+# Composer
+composer.phar
+composer.lock
+
+# Windows special files
+nul
+NUL

@@ -1,0 +1,3 @@
+id,username,password,full_name,role,status,created_at,updated_at
+1,admin,$2y$10$z8Y1I6wqOZM.37WMsA019OjUl6UeKFxGgtlI2D9zREJj4DrtzueRi,,admin,active,"2025-11-15 04:05:31","2025-11-15 04:05:31"
+2,user1,$2y$10$TqjPbrJQJ3bsRI/xeRnN4OSpVdIF/ajNyHQW3T8ng3/VfZ3UZwyTK,Khoa,user,active,"2025-11-15 09:12:18","2025-11-15 09:15:14"

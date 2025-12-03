@@ -1,0 +1,304 @@
+﻿id,diem_dau,diem_cuoi,khoang_cach_km
+1,Cảng Sotrans Thủ Đức,Phao PL4 (NB),30
+2,Cảng Sotrans Thủ Đức,Phao Gò Gia,65
+3,Cảng Sotrans Thủ Đức,Tân Uyên (BD),80
+4,Cảng Sotrans Thủ Đức,Cảng An Ngãi (BRVT),105
+5,Cảng Sotrans Thủ Đức,Cảng Long Thuận (ĐN),37
+6,Cảng Rạch Chiếc,Cảng An Ngãi (BRVT),105
+7,Cảng Rạch Chiếc,Phao Thiềng Liềng,63
+8,Cảng Rạch Chiếc,Cảng Tổng Hợp Thị Vải,75
+9,Quảng Xuyên,Fico Tây Ninh,172
+10,Fico Tây Ninh,Cảng Hiệp Phước,185
+11,Cảng Long Thuận (ĐN),Fico Tây Ninh,197
+12,Cảng Long Thuận (ĐN),Nhà máy xi măng Kiên Lương,334
+13,XM Công Thanh (ĐN),XM Con Gà,334
+14,Cảng Ngã Bảy (HG),Vĩnh Xương (AG),159
+15,Cảng Long Hậu (Long An),Phao HL4 (NB),9
+16,Cảng Long Hậu (Long An),Cảng Long Thuận (ĐN),16
+17,Cảng Long Hậu (Long An),Cảng Lotus,28
+18,Cảng Long Hậu (Long An),Phao Thiềng Liềng,42
+19,Cảng Long Hậu (Long An),Phao Gò Gia,44
+20,Cảng Long Hậu (Long An),Cảng Tổng Hợp Thị Vải,54
+21,Cảng Long Hậu (Long An),Tân Uyên (BD),74
+22,Cảng Long Hậu (Long An),Cảng An Ngãi (BRVT),84
+23,Cảng Long Hậu (Long An),Vĩnh Xương (AG),246
+24,Cảng Thốt Nốt (CT),Vĩnh Xương (AG),89
+25,Cảng Thốt Nốt (CT),Nhà máy xi măng Kiên Lương,136
+26,Cảng Mỹ Xuyên (ST),Cảng An Ngãi (BRVT),319
+27,Phao Thiềng Liềng,Cảng Lotus,52
+28,TGN Dầu tiếng (BD),Cảng An Ngãi (BRVT),183
+29,Tuấn An Phú (BD),Cảng Thành Được (BD),12
+30,Tuấn An Phú (BD),Cảng Tổng Hợp Thị Vải,110
+31,Tân Uyên (BD),TN Phú Hữu,50
+32,Tân Uyên (BD),XM Hạ Long (HP),70
+33,TN Phú Hữu,Phao ĐT1 (Cát Lái),7
+34,TN Phú Hữu,Cảng Lotus,18
+35,TN Phú Hữu,XM Hạ Long (HP),20
+36,TN Phú Hữu,Cảng Long Thuận (ĐN),22
+37,TN Phú Hữu,Cảng Long Bình (ĐN),29
+38,TN Phú Hữu,Cảng Nhất Nam (ĐN),31
+39,TN Phú Hữu,Quảng Xuyên,33
+40,TN Phú Hữu,Phao Thiềng Liềng,48
+41,TN Phú Hữu,Phao Gò Gia,50
+42,TN Phú Hữu,Tân Uyên (BD),50
+43,TN Phú Hữu,Cảng Thành Được (BD),55
+44,TN Phú Hữu,Ụ Đại Nam (Long An),56
+45,TN Phú Hữu,Cảng Tổng Hợp Thị Vải,60
+46,TN Phú Hữu,Cảng Phú Mỹ,60
+47,TN Phú Hữu,Cảng An Ngãi (BRVT),90
+48,TN Phú Hữu,Fico Tây Ninh,205
+49,TN Phú Hữu,Vĩnh Xương (AG),262
+50,Phao ĐT1 (Cát Lái),Cảng Hoàng Tuấn (Long An),89
+51,TN Long An,Quảng Xuyên,63
+52,TN Long An,Cảng Long Thuận (ĐN),88
+53,TN Long An,Cảng Lotus,100
+54,TN Long An,Fico Tây Ninh,109
+55,TN Long An,Phao Thiềng Liềng,114
+56,TN Long An,Phao Gò Gia,116
+57,TN Long An,Cảng Long Bình (ĐN),125
+58,TN Long An,Cảng Tổng Hợp Thị Vải,127
+60,TN Long An,Cảng Thành Được (BD),152
+61,TN Long An,Cảng An Ngãi (BRVT),156
+62,TN Long An,Cảng Thiện Tân (BD),162
+63,TN Long An,Cảng Bảo Thy (BD),168
+64,TN Long An,Vĩnh Xương (AG),226
+65,Cảng Hoàng Tuấn (Long An),Phao ĐT1 (Cát Lái),89
+66,Cảng Hoàng Tuấn (Long An),Fico Tây Ninh,109
+67,Cảng Bourbon (Long An),Fico Tây Ninh,109
+68,Cảng Phan Vũ (Long An),Fico Tây Ninh,85
+69,Cảng Phan Vũ (Long An),Tân Uyên (BD),170
+70,Cảng Ngọc Bích (Long An),Cảng An Ngãi (BRVT),159
+71,Cảng Bến Lức (Long An),Tân Uyên (BD),146
+72,Cảng Bến Lức (Long An),Cảng Tổng Hợp Thị Vải,127
+73,Cảng Bến Lức (Long An),Cảng An Ngãi (BRVT),156
+74,DC (Bình Đức-Long An),Cảng An Ngãi (BRVT),166
+75,Vàm Láng,Cảng An Ngãi (BRVT),114
+76,Cảng Phú Quang,Cảng AHT (Bình Dương),10
+77,Cảng Phú Quang,Cảng Lotus,71
+78,Cảng Phú Quang,Phao Gò Gia,125
+79,Cảng Phú Quang,Cảng Tổng Hợp Thị Vải,130
+80,Cảng Phú Quang,Cảng An Ngãi (BRVT),165
+81,Cảng AHT (Bình Dương),Phao PL4 (NB),80
+82,Cảng AHT (Bình Dương),Cảng Long Thuận (ĐN),87
+83,Cảng AHT (Bình Dương),Cảng Long Bình (ĐN),109
+84,Cảng AHT (Bình Dương),Phao Gò Gia,115
+85,Cảng AHT (Bình Dương),Cảng Tổng Hợp Thị Vải,120
+86,Cảng AHT (Bình Dương),Ụ Đại Nam (Long An),121
+87,Cảng AHT (Bình Dương),Tân Uyên (BD),130
+88,Cảng AHT (Bình Dương),Cảng An Ngãi (BRVT),155
+89,Cảng AHT (Bình Dương),Cảng Bờ Sông AHT (ST),279
+90,Cảng Nhất Nam (ĐN),Cảng Bến Lức (Long An),127
+91,Cảng Long Bình (ĐN),Cảng AHT (Bình Dương),109
+92,Cảng Long Bình (ĐN),Cảng Bờ Sông AHT (ST),243
+93,Cảng Bờ Sông AHT (ST),NM Nhiệt điện SH (HG),7
+94,Cảng Bờ Sông AHT (ST),Vĩnh Xương (AG),150
+95,Cảng Bờ Sông AHT (ST),Cảng Long Thuận (ĐN),206
+96,Cảng Thiện Tân (BD),Cảng Cái Cui (CT),276
+97,Cảng Thường Tân (BD),Tân Uyên (BD),22
+98,Cảng Thường Tân (BD),Cảng Tổng Hợp Thị Vải,126
+99,Cảng An Ngãi (BRVT),Insee Thị Vải,40
+100,Cảng An Ngãi (BRVT),Cảng Long Hậu (Long An),84
+101,Cảng An Ngãi (BRVT),Cảng Sotrans Thủ Đức,105
+102,Cảng An Ngãi (BRVT),Cảng Rạch Chiếc,105
+103,Cảng An Ngãi (BRVT),Cảng Bến Lức (Long An),156
+104,Cảng An Ngãi (BRVT),TN Long An,156
+105,Cảng An Ngãi (BRVT),Cảng Ngọc Bích (Long An),159
+106,Cảng An Ngãi (BRVT),DC (Bình Đức-Long An),166
+107,Cảng An Ngãi (BRVT),Cảng Phan Vũ (Long An),180
+108,Cảng An Ngãi (BRVT),Măng Thít (Vĩnh Long),209
+109,Cảng An Ngãi (BRVT),Cảng Ngã Bảy (HG),268
+110,Cảng An Ngãi (BRVT),Cảng Cái Cui (CT),270
+111,Cảng An Ngãi (BRVT),Cảng Hoàng Diệu (CT),282
+112,Cảng An Ngãi (BRVT),Cảng Thốt Nốt (CT),309
+113,Cảng An Ngãi (BRVT),Cảng Hoàng Sơn Lâm (VC-ĐT),311
+114,Cảng An Ngãi (BRVT),Cảng Mỹ Xuyên (ST),319
+115,Cảng An Ngãi (BRVT),Cảng Rạch Giá (KG),336
+116,Cảng An Ngãi (BRVT),Nhà máy xi măng Kiên Lương,402
+117,Cảng An Ngãi (BRVT),XM Cá Sấu,410
+118,Cảng Thành Được (BD),Nhà máy xi măng Kiên Lương,398
+119,Cảng Bảo Thy (BD),XM Con Gà,414
+120,Cảng Thạnh Phước,Tân Uyên (BD),5
+121,Cảng Thạnh Phước,Cảng Lotus,63
+122,Cảng Rạch Giá (KG),Nhà máy xi măng Kiên Lương,68
+123,Cảng Rạch Giá (KG),Insee Hòn Chông,79
+124,Cảng Rạch Giá (KG),NM Nhiêt điên SH (HG),128
+125,Cảng Rạch Giá (KG),Vĩnh Xương (AG),149
+126,Cẩm Phả (Thị Vải),Cảng An Ngãi (BRVT),58
+127,Insee Thị Vải,Cảng Tổng Hợp Thị Vải,4
+128,Insee Thị Vải,Phao Gò Gia,17
+129,Insee Thị Vải,Cảng Long Thuận (ĐN),38
+130,Insee Thị Vải,Cảng An Ngãi (BRVT),40
+131,Insee Thị Vải,Fico Tây Ninh,235
+132,Cảng Tổng Hợp Thị Vải,Cảng AHT (Bình Dương),120
+133,Cảng Tổng Hợp Thị Vải,Cảng Thạnh Phước,105
+134,Cảng Tổng Hợp Thị Vải,Phao Gò Gia,15
+135,Cảng Tổng Hợp Thị Vải,Cảng Thường Tân (BD),126
+136,Cảng Phú Mỹ,Cảng Thường Tân (BD),126
+137,Cảng Phú Mỹ,Cảng Tân Thuận 1,64
+138,Badico (BD),Cảng An Ngãi (BRVT),183
+139,Phao PL4 (NB),TN Phú Hữu,15
+140,Phao PL4 (NB),Nhà máy xi măng Kiên Lương,327
+141,Vĩnh Xương (AG),Cảng Cái Cui (CT),140
+142,Vĩnh Xương (AG),Nhà máy xi măng Kiên Lương,217
+143,Vĩnh Xương (AG),Cảng Long Hậu (Long An),246
+144,Vĩnh Xương (AG),Cảng Long Tân (ĐN),268
+145,Vĩnh Xương (AG),Cảng Bảo Minh Thịnh (ĐN),268
+146,Vĩnh Xương (AG),Cảng Thành Tây Hạ (ĐN),268
+147,Vĩnh Xương (AG),Cảng Sotrans Thủ Đức,277
+148,Vĩnh Xương (AG),Cảng Đăng Diệp (ĐN),279
+149,Vĩnh Xương (AG),Tân Uyên (BD),312
+150,Vĩnh Xương (AG),Tuấn An Phú (BD),312
+151,Vĩnh Xương (AG),TGN Dầu tiếng (BD),355
+152,Cảng Lotus,Cảng Long Thuận (ĐN),26
+153,Cảng Lotus,Phao Thiềng Liềng,52
+154,Cảng Lotus,Phao Gò Gia,54
+155,Cảng Lotus,Cảng Tổng Hợp Thị Vải,64
+156,Cảng Lotus,Tân Uyên (BD),68
+157,Cảng Lotus,Cảng An Ngãi (BRVT),94
+158,Cảng Lotus,Cảng Bourbon (Long An),100
+159,Cảng Tân Thuận 1,Cảng Thạnh Phước,63
+160,Cảng Tân Thuận 1,Cảng Tổng Hợp Thị Vải,64
+161,Cảng Tân Thuận 1,Cảng Bourbon (Long An),100
+162,Cảng Lotus,Cảng AHT (Bình Dương),61
+163,Cảng Hiệp Phước,XM Công Thanh (ĐN),12
+164,Cảng Hiệp Phước,Cảng Long Thuận (ĐN),12
+165,Cảng Hiệp Phước,Phao Thiềng Liềng,38
+166,Cảng Hiệp Phước,Phao Gò Gia,40
+167,Cảng Hiệp Phước,Cảng Tổng Hợp Thị Vải,50
+168,Cảng Hiệp Phước,Tân Uyên (BD),70
+169,Cảng Hiệp Phước,Cảng An Ngãi (BRVT),80
+170,Cảng Hiệp Phước,Fico Tây Ninh,185
+171,Cảng Hiệp Phước,Nhà máy xi măng Kiên Lương,322
+172,XM Hạ Long (HP),Phao Gò Gia,40
+173,XM Hạ Long (HP),Cảng An Ngãi (BRVT),80
+174,XM Hạ Long (HP),Badico (BD),103
+175,XM Hạ Long (HP),Fico Tây Ninh,185
+176,Cảng Đăng Diệp (ĐN),Cảng An Ngãi (BRVT),107
+177,Cảng Đăng Diệp (ĐN),Cảng Thường Tân (BD),69
+178,Cảng Bảo Minh Thịnh (ĐN),Tuấn An Phú (BD),44
+179,Cảng Thành Tây Hạ (ĐN),Cảng An Ngãi (BRVT),96
+180,Cảng Long Tân (ĐN),Cảng Long Thuận (ĐN),28
+181,Cảng Long Tân (ĐN),Tân Uyên (BD),44
+182,Cảng Long Tân (ĐN),Cảng Tổng Hợp Thị Vải,66
+183,Cảng Long Tân (ĐN),Cảng An Ngãi (BRVT),96
+184,Cảng Cái Cui (CT),Vĩnh Xương (AG),140
+185,Cảng Cái Cui (CT),Cảng Tổng Hợp Thị Vải,240
+186,Cảng Cái Cui (CT),Cảng Hoàng Diệu (CT),15
+187,Cảng Cái Cui (CT),Nhà máy xi măng Kiên Lương,185
+188,Cảng Hoàng Diệu (CT),Vĩnh Xương (AG),123
+189,Cảng Hoàng Diệu (CT),Nhà máy xi măng Kiên Lương,173
+190,Cảng Hoàng Sơn Lâm (VC-ĐT),Cảng Hoàng Diệu (CT),36
+191,Cảng Hoàng Sơn Lâm (VC-ĐT),NM Nhiêt điên SH (HG),57
+192,Cảng Hoàng Sơn Lâm (VC-ĐT),Vĩnh Xương (AG),87
+193,Cảng Hoàng Sơn Lâm (VC-ĐT),Nhà máy xi măng Kiên Lương,134
+194,Cảng Hoàng Sơn Lâm (VC-ĐT),Ụ Thiện Chiến (Bến Tre),154
+195,Cảng Hoàng Sơn Lâm (VC-ĐT),Cảng Long Thuận (ĐN),243
+196,Insee Hòn Chông,Cảng Hiệp Phước,330
+197,Insee Hòn Chông,Insee Thị Vải,380
+198,XM Cá Sấu,Insee Hòn Chông,8
+199,XM Cá Sấu,Nhà máy xi măng Kiên Lương,27
+200,Nhà máy xi măng Kiên Lương,Insee Hòn Chông,27
+201,Nhà máy xi măng Kiên Lương,Cảng Hoàng Diệu (CT),173
+202,Nhà máy xi măng Kiên Lương,Vĩnh Xương (AG),217
+203,Nhà máy xi măng Kiên Lương,TN Long An,306
+204,Nhà máy xi măng Kiên Lương,XM Hạ Long (HP),322
+205,Nhà máy xi măng Kiên Lương,Cảng Long Thuận (ĐN),334
+206,Nhà máy xi măng Kiên Lương,TN Phú Hữu,342
+207,Phao Gò Gia,Cảng Bảo Toàn,17
+208,Phao Gò Gia,Cảng Phú Quang,125
+209,Phao Gò Gia,NM Nhiêt điên SH (HG),225
+210,Phao Gò Gia,Insee Hòn Chông,370
+211,Cảng Bảo Toàn,Cảng Tổng Hợp Thị Vải,7
+212,Cảng Bảo Toàn,Phao Gò Gia,17
+213,Cảng Bảo Toàn,Tân Uyên (BD),117
+214,Cảng Bảo Toàn,Fico Tây Ninh,242
+215,NM Nhiêt điên SH (HG),Vĩnh Xương (AG),144
+216,NM Nhiêt điên SH (HG),Quảng Xuyên,174
+217,NM Nhiêt điên SH (HG),Nhà máy xi măng Kiên Lương,196
+218,NM Nhiêt điên SH (HG),Phao ĐT1 (Cát Lái),200
+219,NM Nhiêt điên SH (HG),Phao Gò Gia,225
+220,NM Nhiêt điên SH (HG),Cẩm Phả (Thị Vải),237
+221,NM Nhiêt điên SH (HG),Tuấn An Phú (BD),254
+222,NM Nhiêt điên SH (HG),Tân Uyên (BD),254
+223,NM Nhiêt điên SH (HG),Cảng An Ngãi (BRVT),267
+224,Ụ Đại Nam (Long An),Cảng Long Thuận (ĐN),48
+225,Ụ Đại Nam (Long An),Phao Gò Gia,76
+226,Ụ Đại Nam (Long An),Tân Uyên (BD),106
+227,Ụ Đại Nam (Long An),Fico Tây Ninh,155
+228,Ụ Việt Long (Long An),Cảng An Ngãi (BRVT),159
+229,Ụ Thiện Chiến (Bến Tre),Vĩnh Xương (AG),178
+230,TN Phú Hữu,Cầu Long Thành,122
+231,Cảng AHT (Bình Dương),XM Con Gà,279
+232,Cảng Bờ Sông AHT (ST),XM Con Gà,65
+233,Cảng Bờ Sông AHT (ST),Cái Sắn(CT),65
+234,Cái Sắn(CT),XM Cá Sấu,143
+235,XM Cá Sấu,XMKL,27
+236,XMKL,TN Long An,306
+237,TN Long An,Cái Sắn(CT),174
+238,TN Long An,Cảng Thường Tân (BD),168
+239,Cảng Thường Tân (BD),BMT Cần Thơ (Cái Cui),282
+240,BMT Cần Thơ (Cái Cui),Vĩnh Xương( AG),140
+241,Vĩnh Xương (AG),XMKL,217
+242,Cảng Hoàng Sơn Lâm (VC-ĐT),Cái Sắn(CT),2
+243,Quảng Xuyên,XM Con Gà,309
+244,TN Long An,Cảng Quốc Hằng (ĐN),127
+245,Cảng Quốc Hằng (ĐN),BMT Cần Thơ (Cái Cui),241
+246,BMT Cần Thơ (Cái Cui),Cảng Bảo Mai (Đồng Tháp),55
+247,Cảng Bảo Mai (Đồng Tháp),XM Con Gà,132
+248,TN Long An,Cảng Sông Buôn (ĐN),168
+249,Cảng Sông Buôn (ĐN),BMT Long An,168
+250,Cái Sắn(CT),XM Con Gà,132
+251,Bình Minh (Vĩnh Long),Nhà máy xi măng Kiên Lương,165
+252,TN Long An,TN Phú Hữu,50
+253,Phao Gò Gia,Cảng Cái Cui (CT),230
+254,Tuấn An Phú (BD),TN Phú Hữu,50
+255,Fico Tây Ninh,Fico Hiệp Phước,185
+256,Fico Hiệp Phước,Tuấn An Phú (BD),70
+257,Tuấn An Phú (BD),Phao BP12 (Nhà Bè),65
+258,Phao BP12 (Nhà Bè),Phao BP4 (Gò Gia),35
+259,Phao BP09 (Gò Gia),Cảng Long Thuận (ĐN),28
+260,Cảng Long Thuận (ĐN),Phao BP01 (Gò Gia),28
+261,TN Phú Hữu,Phao BP15 (Gò Gia),50
+262,Phao BP15 (Gò Gia),Cảng Cái Cui (CT),230
+263,Fico Hiệp Phước,Phao BP01 (Gò Gia),40
+264,XM Hạ Long (HP),Cảng Long Thuận (ĐN),12
+265,Cảng Thường Tân (BD),Nhà máy xi măng Kiên Lương,414
+266,TN Long An,Phao BP15 (Gò Gia),116
+267,TN Phú Hữu,Phao BP04 (Gò Gia),50
+268,Phao BP04 (Gò Gia),Fico Tây Ninh,225
+269,Cảng Cái Cui (CT),Insee Hòn Chông,196
+270,TN Phú Hữu,Cảng TVP (Thị Vải),60
+271,Cảng TVP (Thị Vải),Cảng AHT (Bình Dương),120
+272,Cảng AHT (Bình Dương),Phao BP15 (Gò Gia),115
+273,Insee Hiệp Phước,Nhà máy xi măng Kiên Lương,322
+274,Insee Hòn Chông,Insee Hiệp Phước,330
+275,TN Phú Hữu,Cảng TMN (Phú Mỹ),60
+276,Cảng TMN (Phú Mỹ),C.An Sơn,100
+277,TN Long An,Cảng TVP (Thị Vải),127
+278,C.An Sơn,Phao ITC (Gò Gia),90
+279,Phao ITC (Gò Gia),Cảng Phú Quang,125
+280,Cảng Phú Quang,Phao BP04 (Gò Gia),125
+281,Cảng Bờ Sông AHT (ST),Nhà máy xi măng Kiên Lương,197
+282,TN Phú Hữu,Phao BP08 (Gò Gia),50
+283,Phao BP08 (Gò Gia),Cảng Phú Quang,125
+284,Nhà máy xi măng Kiên Lương,Phao BP12 (Nhà Bè),327
+285,Phao BP12 (Nhà Bè),Cảng Long Thuận (ĐN),7
+286,Fico Hiệp Phước,Phao BP04 (Gò Gia),40
+287,Cảng An Ngãi (BRVT),BMT - Cần Thơ (Thốt Nốt),309
+288,BMT - Cần Thơ (Thốt Nốt),Nhà máy xi măng Kiên Lương,136
+289,C.An Sơn,Cảng Long Thuận (ĐN),62
+290,Fico Hiệp Phước,Nhà máy xi măng Kiên Lương,322
+292,Cảng An Ngãi (BRVT),XM Đồng Tâm (TG),173
+293,XM Đồng Tâm (TG),Cảng Long Thuận (ĐN),105
+294,Fico Hiệp Phước,Cảng Thường Tân (BD),92
+295,TN Phú Hữu,Phao BP02 (Gò Gia),50
+296,Phao BP02 (Gò Gia),Cảng Phú Quang,125
+297,Ụ Đại Nam (Long An),Vĩnh Xương (AG),212
+298,Fico Hiệp Phước,Cảng Long Thuận (ĐN),12
+299,Ụ Trí Nguyễn,Vĩnh Xương (AG),82
+300,Cảng Bến Nghé,TN Phú Hữu,18
+301,Cảng Bến Nghé-> Phú Hữu (Lãnh vật tư),Cảng Long Thuận (ĐN),30
+302,TN Phú Hữu,Cảng SITV(Thị Vải),60
+303,Cảng SITV(Thị Vải),Cảng Tuệ Minh (Thường Tân),126
+304,Cảng Tuệ Minh (Thường Tân),Tuấn An Phú (BD),22
+305,TN Phú Hữu,Ụ Minh Tâm,20
