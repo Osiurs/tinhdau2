@@ -1,0 +1,29 @@
+# Debug & Logs
+debug_log.txt
+*.log
+
+# Data files (sensitive)
+data/ket_qua_tinh_toan.csv
+data/dau_ton.csv
+data/users.csv
+
+# Local files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Backup
+backup/
+bin/
+
+# IDE
+.vscode/
+.idea/
+
+# Vendor (optional - include if needed)
+vendor/
+
+# Temp files
+*.tmp
+*.temp

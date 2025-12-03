@@ -1,0 +1,30 @@
+/* Give the table cell a flex layout to control its children */
+td[data-field="cay-xang-cell"] {
+    min-width: 280px; /* Ensure the cell has enough space */
+}
+
+/* Container for inline editing elements */
+.cay-xang-edit {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px gap */
+    width: 100%;
+}
+
+/* The dropdown select element */
+.cay-xang-edit .form-select {
+    flex-grow: 1; /* Allow the select box to grow */
+    min-width: 150px; /* But not get too small */
+}
+
+/* The save/cancel buttons within the edit container */
+.cay-xang-edit .btn {
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+/* Container for the view-mode action buttons (Edit/Delete) */
+.action-buttons-view {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem; /* 4px gap */
+}
