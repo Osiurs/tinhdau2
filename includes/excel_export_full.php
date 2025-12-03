@@ -621,6 +621,7 @@ function createDAUTONSheet($spreadsheet, $templatePath, $rowsInGroup, $currentMo
                 $sheet->setCellValueByColumnAndRow(16,$currentRow,$ngayCapThem); // NGÀY ĐI cột P (16)
                 setIntHelper($sheet,15,$currentRow,$litInt); // DẦU SD cột O (15)
                 // Cấp thêm mặc định 0km → Ghi vào cột <80km (cột V, index 22)
+                setIntHelper($sheet,22,$currentRow,$litInt,true); // GHI VÀO CELL cột V (<80km)
                 $subtotal[15]+=$litInt; // DẦU SD index (cột O)
                 $subtotal[22]+=$litInt; // Cộng vào bucket <80km (cột V) vì cấp thêm mặc định 0km
                 $sheet->getStyle("A{$currentRow}:X{$currentRow}")->applyFromArray($defaultCellStyle);
