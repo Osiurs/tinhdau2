@@ -444,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'he_so_khong_hang' => 0,
                 'khoi_luong_van_chuyen_t' => 0,
                 'khoi_luong_luan_chuyen' => 0,
-                'dau_tinh_toan_lit' => 0,
+                'dau_tinh_toan_lit' => $soLuongCapThem, // FIX: Ghi số lượng cấp thêm thay vì 0
                 'cap_them' => 1, // Đây là cấp thêm
                 'doi_lenh' => 0,
                 'diem_du_kien' => '',
