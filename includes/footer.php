@@ -1003,7 +1003,9 @@
             const diemBatDau = document.getElementById('diem_bat_dau').value.trim();
             const diemKetThuc = document.getElementById('diem_ket_thuc').value.trim();
             const khoiLuong = document.getElementById('khoi_luong').value.trim();
-            const capThemChecked = document.getElementById('cap_them') ? document.getElementById('cap_them').checked : false;
+            // Fix: cap_them là hidden input (không có .checked), nên check toggle checkbox hoặc value
+            const toggleCapThem = document.getElementById('toggle_cap_them');
+            const capThemChecked = toggleCapThem ? toggleCapThem.checked : false;
             const soLuongCapThem = document.getElementById('so_luong_cap_them') ? document.getElementById('so_luong_cap_them').value.trim() : '';
             const loaiCapThem = document.querySelector('input[name="loai_cap_them"]:checked') ? document.querySelector('input[name="loai_cap_them"]:checked').value : 'bom_nuoc';
             const diaDiemCapThem = document.getElementById('dia_diem_cap_them') ? document.getElementById('dia_diem_cap_them').value.trim() : '';

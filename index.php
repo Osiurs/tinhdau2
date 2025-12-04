@@ -1297,6 +1297,8 @@ include 'includes/header.php';
 
                         if (show) {
                             card.style.display = 'block';
+                            // Set cap_them = 1 khi hiện form (user đã bật toggle)
+                            if (capThemHidden) capThemHidden.value = '1';
 
                             // Đảm bảo các inputs KHÔNG bị disabled
                             if (diaDiemInput) {
@@ -1322,7 +1324,7 @@ include 'includes/header.php';
                             }, 150);
                         } else {
                             card.style.display = 'none';
-                            // Reset giá trị khi ẩn
+                            // Reset giá trị khi ẩn (cap_them = 0)
                             if (capThemHidden) capThemHidden.value = '0';
                             if (soLuongInput) soLuongInput.value = '';
                             if (diaDiemInput) diaDiemInput.value = '';
@@ -1563,14 +1565,24 @@ include 'includes/header.php';
                         lyDoKhacInput.addEventListener('change', updateCapThemPreview);
                     }
 
-                    // Fix #2,#6,#8,#10: Auto-set cap_them = 1 khi có nhập số lượng
+                    // Auto-enable cấp thêm khi nhập số lượng
                     if (soLuongInput) {
                         soLuongInput.addEventListener('input', function() {
                             updateCapThemPreview();
-                            // Auto-enable cấp thêm khi có nhập số lượng > 0
+                            // Auto-enable toggle và cap_them khi có nhập số lượng > 0
+                            const hasQuantity = parseFloat(soLuongInput.value) > 0;
+                            const toggleCheckbox = document.getElementById('toggle_cap_them');
                             const capThemHidden = document.getElementById('cap_them');
-                            if (capThemHidden) {
-                                capThemHidden.value = (parseFloat(soLuongInput.value) > 0) ? '1' : '0';
+
+                            if (hasQuantity) {
+                                // Auto-check toggle và set cap_them = 1
+                                if (toggleCheckbox && !toggleCheckbox.checked) {
+                                    toggleCheckbox.checked = true;
+                                    toggleCapThemForm(true);
+                                }
+                                if (capThemHidden) {
+                                    capThemHidden.value = '1';
+                                }
                             }
                         });
                     }
