@@ -1629,13 +1629,22 @@ include 'includes/header.php';
                         if (lyDoKhacInput) lyDoKhacInput.removeAttribute('required');
 
                         // FIX: Disable inputs ngay khi page load nếu form đang ẩn (để tránh validation error)
+                        // NHƯNG chỉ xóa value nếu KHÔNG có dữ liệu cấp thêm (để tránh mất dữ liệu khi tính toán)
                         const card = document.getElementById('cap_them_card');
                         const toggleCheckbox = document.getElementById('toggle_cap_them');
-                        // Kiểm tra xem form có đang ẩn không (checkbox unchecked hoặc display: none)
+                        const soLuongInput = document.getElementById('so_luong_cap_them');
+                        const capThemHidden = document.getElementById('cap_them');
+
+                        // Kiểm tra xem form có đang ẩn không
                         const isFormHidden = !toggleCheckbox || !toggleCheckbox.checked;
 
-                        if (card && isFormHidden) {
-                            const soLuongInput = document.getElementById('so_luong_cap_them');
+                        // Kiểm tra xem có dữ liệu cấp thêm từ PHP không (từ session sau tính toán)
+                        const capThemValue = capThemHidden ? capThemHidden.value : '0';
+                        const soLuongValue = soLuongInput ? soLuongInput.value : '';
+                        const hasCapThemData = capThemValue == '1' || (soLuongValue && parseFloat(soLuongValue) > 0);
+
+                        // CHỈ disable và xóa value nếu form ẩn VÀ KHÔNG có dữ liệu
+                        if (card && isFormHidden && !hasCapThemData) {
                             const lyDoDisplayInput = document.getElementById('ly_do_cap_them_display');
 
                             // Disable tất cả inputs trong form cấp thêm
