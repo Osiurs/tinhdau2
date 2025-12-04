@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'dia_diem_cap_them' => $diaDiemCapThem,
             'ly_do_cap_them' => $lyDoCapThem,
             'ly_do_cap_them_khac' => $lyDoCapThemKhac,
-            'so_luong_cap_them' => ($soLuongCapThem === 0.0 ? '0' : (string)$soLuongCapThem),
+            'so_luong_cap_them' => ($soLuongCapThem === 0.0 ? '' : (string)$soLuongCapThem),  // FIX: Dùng '' thay vì '0' để tránh vi phạm min="0.01"
             'ghi_chu' => $ghiChu
         ];
 
@@ -1627,6 +1627,35 @@ include 'includes/header.php';
 
                         if (diaDiemInput) diaDiemInput.removeAttribute('required');
                         if (lyDoKhacInput) lyDoKhacInput.removeAttribute('required');
+
+                        // FIX: Disable inputs ngay khi page load nếu form đang ẩn (để tránh validation error)
+                        const card = document.getElementById('cap_them_card');
+                        const toggleCheckbox = document.getElementById('toggle_cap_them');
+                        // Kiểm tra xem form có đang ẩn không (checkbox unchecked hoặc display: none)
+                        const isFormHidden = !toggleCheckbox || !toggleCheckbox.checked;
+
+                        if (card && isFormHidden) {
+                            const soLuongInput = document.getElementById('so_luong_cap_them');
+                            const lyDoDisplayInput = document.getElementById('ly_do_cap_them_display');
+
+                            // Disable tất cả inputs trong form cấp thêm
+                            if (diaDiemInput) {
+                                diaDiemInput.disabled = true;
+                                diaDiemInput.value = '';
+                            }
+                            if (soLuongInput) {
+                                soLuongInput.disabled = true;
+                                soLuongInput.value = '';  // Xóa value để tránh vi phạm min="0.01"
+                            }
+                            if (lyDoKhacInput) {
+                                lyDoKhacInput.disabled = true;
+                                lyDoKhacInput.value = '';
+                            }
+                            if (lyDoDisplayInput) {
+                                lyDoDisplayInput.disabled = true;
+                                lyDoDisplayInput.value = '';
+                            }
+                        }
 
                         // QUAN TRỌNG: Trigger change event để hiển thị đúng form dựa trên radio được chọn
                         const selectedRadio = document.querySelector('input[name="loai_cap_them"]:checked');
