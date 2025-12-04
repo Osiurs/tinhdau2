@@ -1425,6 +1425,14 @@
                         if (btnBack) btnBack.disabled = idx === 0;
                         if (btnNext) btnNext.classList.toggle('d-none', idx >= total-1);
                         if (btnDone) btnDone.classList.toggle('d-none', idx < total-1);
+                        // Auto-scroll đến wizard để user thấy ngay
+                        setTimeout(() => {
+                            wizard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Focus vào input đầu tiên để user có thể nhập liền
+                            if (dateEl) {
+                                try { dateEl.focus(); } catch(e) {}
+                            }
+                        }, 100);
                     };
 
                     const persistCurrent = ()=>{
@@ -2828,8 +2836,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Khối lượng (tấn) <span class="text-danger">*</span></label>
-                                    <input type="number" step="0.01" min="0" class="form-control" id="edit_khoi_luong" name="khoi_luong_van_chuyen_t" 
-                                           value="${currentKhoiLuong}" required>
+                                    <input type="number" step="0.01" min="0" class="form-control" id="edit_khoi_luong" name="khoi_luong_van_chuyen_t"
+                                           value="${currentKhoiLuong}" required
+                                           oninput="checkRouteChange();">
                                     <small class="form-text text-muted">Thay đổi khối lượng sẽ tính lại nhiên liệu với hệ số hiện tại</small>
                                 </div>
                                 <div class="mb-3" id="current_route_info">
@@ -2889,41 +2898,101 @@
                 });
         };
         
-        // Hàm kiểm tra thay đổi tuyến đường
+        // Hàm kiểm tra thay đổi tuyến đường và khối lượng
         window.checkRouteChange = function() {
             const diemDiInput = document.getElementById('edit_diem_di');
             const diemDenInput = document.getElementById('edit_diem_den');
             const infoCard = document.getElementById('current_route_info');
-            
+            const khoiLuongInput = document.getElementById('edit_khoi_luong');
+            const tenTauInput = document.getElementById('ten_tau');
+
             if (!diemDiInput || !diemDenInput || !infoCard) return;
-            
+
             const diemDiMoi = diemDiInput.value.trim();
             const diemDenMoi = diemDenInput.value.trim();
-            
+            const khoiLuong = khoiLuongInput ? (khoiLuongInput.value || 0) : 0;
+            const tenTau = tenTauInput ? tenTauInput.value.trim() : '';
+
             // Lấy giá trị ban đầu từ data attribute hoặc từ segment ban đầu
             const diemDiCu = diemDiInput.dataset.originalValue || diemDiInput.defaultValue || '';
             const diemDenCu = diemDenInput.dataset.originalValue || diemDenInput.defaultValue || '';
-            
+
             // So sánh điểm gốc (loại bỏ ghi chú)
             const diemDiCuGoc = diemDiCu.replace(/\s*（[^）]*）\s*$/u, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
             const diemDenCuGoc = diemDenCu.replace(/\s*（[^）]*）\s*$/u, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
             const diemDiMoiGoc = diemDiMoi.replace(/\s*（[^）]*）\s*$/u, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
             const diemDenMoiGoc = diemDenMoi.replace(/\s*（[^）]*）\s*$/u, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
-            
-            if (diemDiMoiGoc !== diemDiCuGoc || diemDenMoiGoc !== diemDenCuGoc) {
-                // Tuyến đường đã thay đổi
-                if (infoCard) {
-                    infoCard.innerHTML = `
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>Tuyến đường đã thay đổi!</strong><br>
-                            Hệ thống sẽ tự động tính toán lại với hệ số mới của tuyến đường này khi bạn lưu.
-                        </div>
-                    `;
+
+            const tuyenThayDoi = (diemDiMoiGoc !== diemDiCuGoc || diemDenMoiGoc !== diemDenCuGoc);
+
+            // Nếu có bất kỳ thay đổi nào (tuyến hoặc khối lượng), gọi API preview
+            if (tuyenThayDoi || diemDiMoiGoc || diemDenMoiGoc) {
+                if (!diemDiMoiGoc || !diemDenMoiGoc || !tenTau) {
+                    if (tuyenThayDoi) {
+                        infoCard.innerHTML = `
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Đang chờ nhập đủ thông tin...</strong><br>
+                                Vui lòng nhập đầy đủ điểm đi và điểm đến.
+                            </div>
+                        `;
+                    }
+                    return;
                 }
-            } else {
-                // Tuyến đường không thay đổi, hiển thị lại thông tin cũ
-                // (Có thể giữ nguyên hoặc reload từ server)
+
+                // Hiển thị loading
+                infoCard.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        <strong>Đang tính toán...</strong><br>
+                        Vui lòng đợi trong giây lát.
+                    </div>
+                `;
+
+                // Gọi API preview
+                const url = `api/preview_calculation.php?ten_tau=${encodeURIComponent(tenTau)}&diem_di=${encodeURIComponent(diemDiMoi)}&diem_den=${encodeURIComponent(diemDenMoi)}&khoi_luong=${encodeURIComponent(khoiLuong)}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const d = data.data;
+                            const bgClass = tuyenThayDoi ? 'bg-warning text-dark' : 'bg-info text-white';
+                            const title = tuyenThayDoi ? 'Tuyến đường mới (preview)' : 'Tính toán lại với khối lượng mới';
+                            infoCard.innerHTML = `
+                                <div class="card ${bgClass}">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><i class="fas fa-${tuyenThayDoi ? 'exclamation-triangle' : 'info-circle'} me-2"></i>${title}:</h6>
+                                        <p class="mb-1"><strong>Khoảng cách:</strong> ${formatNumber(d.khoang_cach_km)} km</p>
+                                        <p class="mb-1"><strong>Nhiên liệu:</strong> ${formatNumber(d.nhien_lieu_lit)} lít</p>
+                                        <p class="mb-1"><strong>Hệ số có hàng:</strong> ${formatNumber(d.he_so_co_hang, 7)} Lít/T.Km</p>
+                                        <p class="mb-1"><strong>Hệ số không hàng:</strong> ${formatNumber(d.he_so_khong_hang, 6)} Lít/Km</p>
+                                        ${d.nhom_cu_ly ? `<p class="mb-0"><strong>Nhóm cự ly:</strong> ${escapeHtml(d.nhom_cu_ly)}</p>` : ''}
+                                        <hr class="${tuyenThayDoi ? 'bg-dark' : 'bg-white'}">
+                                        <small><i class="fas fa-info-circle me-1"></i>Dữ liệu trên sẽ được lưu khi bạn nhấn "Lưu thay đổi"</small>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            infoCard.innerHTML = `
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Không tìm thấy tuyến đường!</strong><br>
+                                    ${escapeHtml(data.error || 'Chưa có dữ liệu khoảng cách. Vui lòng nhập thủ công.')}
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi tính toán preview:', error);
+                        infoCard.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Lỗi kết nối!</strong><br>
+                                Không thể lấy thông tin tuyến đường. Vui lòng thử lại.
+                            </div>
+                        `;
+                    });
             }
         };
         

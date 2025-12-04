@@ -385,23 +385,40 @@ class KhoangCach {
         $ketQua = [];
         $diemDaThem = [];
         $normalizedDiem = []; // Mảng để theo dõi điểm đã chuẩn hóa
-        
+
         // Nếu có điểm đầu, chỉ lấy những điểm có kết nối thực sự
         if (!empty($diemDau)) {
-            if (function_exists('normalizer_normalize')) {
-                $diemDauNorm = normalizer_normalize($diemDau, Normalizer::FORM_C);
-            } else {
-                $diemDauNorm = $diemDau;
-            }
+            // Tạo variants cho điểm đầu để hỗ trợ tìm kiếm linh hoạt (loại bỏ ghi chú trong ngoặc)
+            $diemDauVariants = $this->getPointNameVariants($diemDau);
+
             foreach ($this->khoangCachData as $row) {
                 $diemDauRow = trim($row['diem_dau']);
                 $diemCuoiRow = trim($row['diem_cuoi']);
-                $cmpDau = function_exists('normalizer_normalize') ? normalizer_normalize($diemDauRow, Normalizer::FORM_C) : $diemDauRow;
-                $cmpCuoi = function_exists('normalizer_normalize') ? normalizer_normalize($diemCuoiRow, Normalizer::FORM_C) : $diemCuoiRow;
                 $khoangCach = $row['khoang_cach_km'];
-                
+
+                // Chuẩn hóa điểm trong database
+                $cmpDau = $this->normalizeString($diemDauRow);
+                $cmpCuoi = $this->normalizeString($diemCuoiRow);
+
+                // Kiểm tra xem có variant nào của điểm đầu khớp với điểm trong DB không
+                $dauMatches = false;
+                foreach ($diemDauVariants as $variant) {
+                    if ($cmpDau === $variant) {
+                        $dauMatches = true;
+                        break;
+                    }
+                }
+
+                $cuoiMatches = false;
+                foreach ($diemDauVariants as $variant) {
+                    if ($cmpCuoi === $variant) {
+                        $cuoiMatches = true;
+                        break;
+                    }
+                }
+
                 // Chỉ thêm điểm cuối nếu điểm đầu khớp với điểm đã chọn và chưa có trong danh sách
-                if ($cmpDau === $diemDauNorm && !in_array($cmpCuoi, $normalizedDiem)) {
+                if ($dauMatches && !in_array($cmpCuoi, $normalizedDiem)) {
                     $ketQua[] = [
                         'diem' => $diemCuoiRow,
                         'loai' => 'diem_cuoi',
@@ -411,9 +428,9 @@ class KhoangCach {
                     $diemDaThem[] = $diemCuoiRow;
                     $normalizedDiem[] = $cmpCuoi;
                 }
-                
+
                 // Chỉ thêm điểm đầu nếu điểm cuối khớp với điểm đã chọn và chưa có trong danh sách
-                if ($cmpCuoi === $diemDauNorm && !in_array($cmpDau, $normalizedDiem)) {
+                if ($cuoiMatches && !in_array($cmpDau, $normalizedDiem)) {
                     $ketQua[] = [
                         'diem' => $diemDauRow,
                         'loai' => 'diem_dau',

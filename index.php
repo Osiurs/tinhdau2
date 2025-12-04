@@ -1016,6 +1016,10 @@ include 'includes/header.php';
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="ghi_chu_diem_bat_dau" name="ghi_chu_diem_bat_dau"
                                     placeholder="Ghi chú..." autocomplete="off">
+                                <div class="mt-1">
+                                    <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFill('ghi_chu_diem_bat_dau', 'Đổi lệnh')">Đổi lệnh</button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="quickFill('ghi_chu_diem_bat_dau', 'Lãnh vật tư')">Lãnh vật tư</button>
+                                </div>
                             </div>
                         </div>
                         <div class="form-text">
@@ -1047,6 +1051,10 @@ include 'includes/header.php';
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="ghi_chu_diem_ket_thuc" name="ghi_chu_diem_ket_thuc"
                                     placeholder="Ghi chú..." autocomplete="off">
+                                <div class="mt-1">
+                                    <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFill('ghi_chu_diem_ket_thuc', 'Đổi lệnh')">Đổi lệnh</button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="quickFill('ghi_chu_diem_ket_thuc', 'Lãnh vật tư')">Lãnh vật tư</button>
+                                </div>
                             </div>
                         </div>
                         <div class="form-text">
@@ -1101,9 +1109,13 @@ include 'includes/header.php';
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-5">
-                                        <div class="d-flex flex-wrap gap-1 align-items-center reason-group">
+                                        <div class="reason-group">
                                             <input type="text" class="form-control form-control-sm diem-moi-reason" name="diem_moi_reason[]"
-                                                placeholder="Ghi chú (tùy chọn)" autocomplete="off">
+                                                placeholder="Lý do thêm..." autocomplete="off">
+                                            <div class="mt-1">
+                                                <button type="button" class="btn btn-primary btn-sm me-1" onclick="this.parentElement.previousElementSibling.value='Đổi lệnh'">Đổi lệnh</button>
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="this.parentElement.previousElementSibling.value='Lãnh vật tư'">Lãnh vật tư</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-12 d-flex gap-2 justify-content-lg-end">
@@ -1123,6 +1135,10 @@ include 'includes/header.php';
                                 <label for="ghi_chu_diem_moi" class="form-label">Ghi chú cho điểm cuối (tùy chọn)</label>
                                 <input type="text" class="form-control" id="ghi_chu_diem_moi" name="ghi_chu_diem_moi"
                                     placeholder="Ghi chú..." autocomplete="off">
+                                <div class="mt-1">
+                                    <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFill('ghi_chu_diem_moi', 'Đổi lệnh')">Đổi lệnh</button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="quickFill('ghi_chu_diem_moi', 'Lãnh vật tư')">Lãnh vật tư</button>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -1189,6 +1205,10 @@ include 'includes/header.php';
                     <div class="mb-3">
                         <label for="ghi_chu" class="form-label"><i class="fas fa-sticky-note me-1"></i>Ghi chú</label>
                         <input type="text" class="form-control" id="ghi_chu" name="ghi_chu" value="<?php echo htmlspecialchars($formData['ghi_chu']); ?>" autocomplete="off" placeholder="Nhập ghi chú (không phải ngày tạo)">
+                        <div class="mt-1">
+                            <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFill('ghi_chu', 'Đổi lệnh')">Đổi lệnh</button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="quickFill('ghi_chu', 'Lãnh vật tư')">Lãnh vật tư</button>
+                        </div>
                     </div>
 
                     <!-- Nút gạt hiện/ẩn form cấp dầu -->
@@ -1242,6 +1262,10 @@ include 'includes/header.php';
                         <div class="mb-3" id="ly_do_cap_them_wrapper" style="display:none;">
                             <label for="ly_do_cap_them_khac" class="form-label">Lý do tiêu hao <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="ly_do_cap_them_khac" name="ly_do_cap_them_khac" autocomplete="off" placeholder="Nhập lý do tiêu hao..." value="<?php echo htmlspecialchars($formData['ly_do_cap_them_khac']); ?>">
+                            <div class="mt-1">
+                                <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFill('ly_do_cap_them_khac', 'Đổi lệnh')">Đổi lệnh</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="quickFill('ly_do_cap_them_khac', 'Lãnh vật tư')">Lãnh vật tư</button>
+                            </div>
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>
                                 Nhập lý do tiêu hao dầu (ví dụ: dầu cho thiết bị, dầu khác...)
@@ -1287,6 +1311,17 @@ include 'includes/header.php';
                     <div id="cap_them_fields" style="display:none;"></div><!-- placeholder để giữ tương thích -->
 
                     <script>
+                    // Hàm điền nhanh nội dung vào ô input
+                    function quickFill(inputId, value) {
+                        const input = document.getElementById(inputId);
+                        if (input) {
+                            input.value = value;
+                            input.focus();
+                            // Trigger sự kiện input để cập nhật preview nếu cần
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
+                    }
+
                     // Hàm toggle hiện/ẩn form cấp dầu
                     function toggleCapThemForm(show) {
                         const card = document.getElementById('cap_them_card');
@@ -2050,9 +2085,13 @@ function themDiemMoi(prefill) {
             </div>
         </div>
         <div class="col-lg-4 col-md-5">
-            <div class="d-flex flex-wrap gap-1 align-items-center reason-group">
+            <div class="reason-group">
                 <input type="text" class="form-control form-control-sm diem-moi-reason" name="diem_moi_reason[]"
-                    placeholder="Ghi chú (tùy chọn)" autocomplete="off">
+                    placeholder="Lý do thêm..." autocomplete="off">
+                <div class="mt-1">
+                    <button type="button" class="btn btn-primary btn-sm me-1" onclick="this.parentElement.previousElementSibling.value='Đổi lệnh'">Đổi lệnh</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="this.parentElement.previousElementSibling.value='Lãnh vật tư'">Lãnh vật tư</button>
+                </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-12 d-flex gap-2 justify-content-lg-end">

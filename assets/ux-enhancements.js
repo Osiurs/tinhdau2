@@ -190,16 +190,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.lastDeleteDebug = data.debug;
                     console.log('[delete_dau_ton] success payload:', data);
                     console.log('[delete_dau_ton] debug:', window.lastDeleteDebug);
+
                     if (data.success) {
                         showAlert(data.message, 'success');
                         const targetUrl = window.location.pathname + window.location.search;
-                        showAlert(data.message, 'success');
                         setTimeout(() => {
                             window.location.href = targetUrl || window.location.pathname;
                         }, 1500);
+                        return;
+                    }
+
+                    const msg = data.message || '';
+                    console.warn('[delete_dau_ton] failure payload:', data);
+
+                    // Nếu backend báo không tìm thấy mục nhập, coi như đã được xóa / không còn tồn tại.
+                    // Để tránh làm người dùng hiểu nhầm, chỉ log và refresh lại trang, không hiện cảnh báo lỗi.
+                    if (msg.indexOf('Không tìm thấy mục nhập với ID đã cho') !== -1) {
+                        console.warn('[delete_dau_ton] entry not found, treating as success');
+                        const targetUrl = window.location.pathname + window.location.search;
+                        setTimeout(() => {
+                            window.location.href = targetUrl || window.location.pathname;
+                        }, 500);
                     } else {
-                        console.warn('[delete_dau_ton] failure payload:', data);
-                        showAlert(data.message || 'Không thể xóa lệnh cấp dầu.', 'danger');
+                        showAlert(msg || 'Không thể xóa lệnh cấp dầu.', 'danger');
                     }
                 })
                 .catch(error => {
