@@ -59,7 +59,10 @@ $formData = [
     'ngay_do_xong' => '',
     'loai_hang' => '',
     'cap_them' => 0,
+    'loai_cap_them' => 'bom_nuoc',
+    'dia_diem_cap_them' => '',
     'ly_do_cap_them' => '',
+    'ly_do_cap_them_khac' => '',
     'so_luong_cap_them' => '',
     'ghi_chu' => ''
 ];
@@ -247,7 +250,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'ngay_do_xong' => $ngayDoXong,
             'loai_hang' => $loaiHang,
             'cap_them' => $capThem,
+            'loai_cap_them' => $loaiCapThem,
+            'dia_diem_cap_them' => $diaDiemCapThem,
             'ly_do_cap_them' => $lyDoCapThem,
+            'ly_do_cap_them_khac' => $lyDoCapThemKhac,
             'so_luong_cap_them' => ($soLuongCapThem === 0.0 ? '0' : (string)$soLuongCapThem),
             'ghi_chu' => $ghiChu
         ];
@@ -1206,15 +1212,15 @@ include 'includes/header.php';
                             <label class="form-label">Loại <span class="text-danger">*</span></label>
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_bom_nuoc" value="bom_nuoc" checked>
+                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_bom_nuoc" value="bom_nuoc" <?php echo ($formData['loai_cap_them'] === 'bom_nuoc') ? 'checked' : ''; ?>>
                                     <label class="form-check-label" for="loai_bom_nuoc">Ma nơ</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_qua_cau" value="qua_cau">
+                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_qua_cau" value="qua_cau" <?php echo ($formData['loai_cap_them'] === 'qua_cau') ? 'checked' : ''; ?>>
                                     <label class="form-check-label" for="loai_qua_cau">Qua cầu</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_khac" value="khac">
+                                    <input class="form-check-input" type="radio" name="loai_cap_them" id="loai_khac" value="khac" <?php echo ($formData['loai_cap_them'] === 'khac') ? 'checked' : ''; ?>>
                                     <label class="form-check-label" for="loai_khac">Khác</label>
                                 </div>
                             </div>
@@ -1222,6 +1228,7 @@ include 'includes/header.php';
                         <div class="mb-3" id="dia_diem_cap_them_wrapper">
                             <label for="dia_diem_cap_them" class="form-label">Địa điểm <span class="text-danger">*</span></label>
                             <input type="text" class="form-control diem-input" id="dia_diem_cap_them" name="dia_diem_cap_them"
+                                value="<?php echo htmlspecialchars($formData['dia_diem_cap_them']); ?>"
                                 placeholder="Nhập địa điểm (hoặc chọn từ gợi ý)..." autocomplete="off"
                                 onfocus="showAllDiem(document.getElementById('dia_diem_cap_them_results'), '');"
                                 oninput="searchDiem(this, document.getElementById('dia_diem_cap_them_results'))">
@@ -1234,7 +1241,7 @@ include 'includes/header.php';
                         <!-- Ô nhập lý do (chỉ hiện khi chọn "Khác") -->
                         <div class="mb-3" id="ly_do_cap_them_wrapper" style="display:none;">
                             <label for="ly_do_cap_them_khac" class="form-label">Lý do tiêu hao <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="ly_do_cap_them_khac" name="ly_do_cap_them_khac" autocomplete="off" placeholder="Nhập lý do tiêu hao..." value="">
+                            <input type="text" class="form-control" id="ly_do_cap_them_khac" name="ly_do_cap_them_khac" autocomplete="off" placeholder="Nhập lý do tiêu hao..." value="<?php echo htmlspecialchars($formData['ly_do_cap_them_khac']); ?>">
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>
                                 Nhập lý do tiêu hao dầu (ví dụ: dầu cho thiết bị, dầu khác...)
@@ -1615,6 +1622,16 @@ include 'includes/header.php';
                             if (toggleCheckbox) {
                                 toggleCheckbox.checked = true;
                                 toggleCapThemForm(true);
+
+                                // Trigger change event cho radio loai_cap_them để hiển thị đúng UI
+                                setTimeout(function() {
+                                    const selectedLoaiCapThem = document.querySelector('input[name="loai_cap_them"]:checked');
+                                    if (selectedLoaiCapThem) {
+                                        const changeEvent = new Event('change', { bubbles: true });
+                                        selectedLoaiCapThem.dispatchEvent(changeEvent);
+                                    }
+                                    updateCapThemPreview();
+                                }, 200);
                             }
                         }
 
