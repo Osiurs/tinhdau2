@@ -20,11 +20,21 @@ if (!isset($_GET['ten_tau']) || !isset($_GET['so_chuyen']) || empty($_GET['ten_t
 
 try {
     $luuKetQua = new LuuKetQua();
-    $tenTau = $_GET['ten_tau'];
+    $tenTau = trim($_GET['ten_tau']);
     $soChuyen = (int)$_GET['so_chuyen'];
     
     // Đọc thô toàn bộ rồi lọc (tránh mọi sai khác do chuẩn hóa tên/định dạng)
     $all = $luuKetQua->docTatCa();
+    
+    // Kiểm tra dữ liệu
+    if (empty($all)) {
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Không có dữ liệu chuyến',
+            'debug' => ['tenTau' => $tenTau, 'soChuyen' => $soChuyen]
+        ]);
+        exit;
+    }
     $normalize = function($s){
         $s = trim((string)$s);
         if (preg_match('/^(HTL|HTV)-0(\d+)$/', $s, $m)) { return $m[1].'-'.$m[2]; }
@@ -35,6 +45,7 @@ try {
     $capThem = [];
     $i = 0;
     foreach ($all as $row) {
+        // CSV sử dụng field 'ten_phuong_tien', không phải 'ten_tau'
         $ship = $normalize($row['ten_phuong_tien'] ?? '');
         $trip = (int)($row['so_chuyen'] ?? 0);
         if ($ship !== $tenTauNorm || $trip !== $soChuyen) continue;
@@ -60,7 +71,13 @@ try {
         'cap_them' => $capThem,
         'last_segment' => $lastSegment,
         'has_data' => !empty($cacDoan) || !empty($capThem),
-        'so_dang_ky' => $soDangKy
+        'so_dang_ky' => $soDangKy,
+        'debug' => [
+            'tenTau' => $tenTau,
+            'soChuyen' => $soChuyen,
+            'segments_count' => count($cacDoan),
+            'cap_them_count' => count($capThem)
+        ]
     ];
     $json = json_encode($resp, JSON_UNESCAPED_UNICODE);
     while (ob_get_level() > 0) { @ob_end_clean(); }
@@ -69,6 +86,15 @@ try {
     
 } catch (Exception $e) {
     while (ob_get_level() > 0) { @ob_end_clean(); }
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    echo json_encode([
+        'success' => false, 
+        'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'debug' => [
+            'tenTau' => $_GET['ten_tau'] ?? 'N/A',
+            'soChuyen' => $_GET['so_chuyen'] ?? 'N/A'
+        ]
+    ]);
 }
 ?>

@@ -13,6 +13,8 @@ $danhSachCayXang = $cayXangModel->getAll();
 $danhSachTau = $heSoTau->getDanhSachTau();
 
 $alert = '';
+// Dùng cho pattern POST-Redirect-GET để tránh trình duyệt hỏi gửi lại biểu mẫu
+$redirectUrl = null;
 
 // Sanitize inputs
 if (!empty($_GET)) { $_GET = sanitize_input($_GET); }
@@ -34,9 +36,12 @@ $cayXang = trim($_POST['cay_xang'] ?? '');
         if ($action === 'cap_them') {
             $dauTon->themCapThem($tenTau, $ngay, $soLuong, $lyDo, $cayXang);
             $alert = '<div class="alert alert-success">Đã lưu lệnh cấp thêm dầu.</div>';
+            // Sau khi lưu thành công, chuyển hướng về cùng trang để tránh resubmit
+            $redirectUrl = 'quan_ly_dau_ton.php?tau=' . urlencode($tenTau) . '#nhatky';
         } elseif ($action === 'tinh_chinh') {
             $dauTon->themTinhChinh($tenTau, $ngay, $soLuong, $lyDo);
             $alert = '<div class="alert alert-success">Đã lưu lệnh tinh chỉnh dầu.</div>';
+            $redirectUrl = 'quan_ly_dau_ton.php?tau=' . urlencode($tenTau) . '#nhatky';
         } elseif ($action === 'transfer') {
             // Chuyển dầu giữa 2 tàu
             $tauNguon = trim($_POST['tau_nguon'] ?? '');
@@ -55,7 +60,15 @@ $cayXang = trim($_POST['cay_xang'] ?? '');
     } catch (Exception $e) {
         log_error('quan_ly_dau_ton', ['error' => $e->getMessage()]);
         $alert = '<div class="alert alert-danger">Lỗi: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        // Không redirect khi có lỗi để giữ lại thông báo trên cùng request
+        $redirectUrl = null;
     }
+}
+
+// Nếu có redirectUrl (tức là POST thành công), thực hiện redirect trước khi render HTML
+if ($redirectUrl !== null) {
+    header('Location: ' . $redirectUrl);
+    exit;
 }
 
 // UI filter: selected ship
@@ -663,43 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('btnSaveTinhChinh not found!');
     }
 
-    // Xử lý nút xóa (cho cả cap_them và tinh_chinh)
-    document.body.addEventListener('click', function(e) {
-        const btnDelete = e.target.closest('.btn-delete');
-        if (btnDelete && !btnDelete.closest('[data-action="delete-transfer"]')) {
-            e.preventDefault();
-            const id = btnDelete.getAttribute('data-id');
-            console.log('Delete button clicked, ID:', id, 'Length:', id ? id.length : 0);
-
-            if (!id || id.trim() === '') {
-                alert('Lỗi: Không tìm thấy ID của mục cần xóa.');
-                return;
-            }
-
-            if (confirm('Bạn có chắc chắn muốn xóa mục này?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                console.log('Sending delete request for ID:', id);
-
-                fetch('../api/delete_dau_ton.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Delete response:', data);
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Lỗi: ' + (data.message || 'Không xác định'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Lỗi khi xóa: ' + error.message);
-                });
-            }
-        }
-    });
+    // Lưu ý: xử lý nút xóa cho dầu tồn đã được cài đặt tập trung trong `assets/ux-enhancements.js`
+    // để tránh bị gọi trùng nhiều lần, không gắn thêm listener xóa tại đây.
 });
 </script>

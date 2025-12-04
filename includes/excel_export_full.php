@@ -126,11 +126,11 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
             $sheet->getStyle('A6')->getFont()->setBold(true)->setSize(13);
             $sheet->getStyle('A6')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-            // Sắp xếp và ghi dữ liệu chi tiết
+            // Sắp xếp theo tên tàu và ___idx (giữ nguyên thứ tự đã lưu trong lịch sử)
             usort($rows, function($a,$b){
                 $ta=mb_strtolower(trim($a['ten_phuong_tien']??'')); $tb=mb_strtolower(trim($b['ten_phuong_tien']??'')); if($ta!==$tb) return $ta<=>$tb;
-                $tripA=intval($a['so_chuyen']??0); $tripB=intval($b['so_chuyen']??0); if($tripA!==$tripB) return $tripA<=>$tripB;
-                $idxA=intval($a['___idx']??0); $idxB=intval($b['___idx']??0); return $idxA<=>$idxB;
+                // Giữ nguyên thứ tự theo ___idx (thứ tự đã lưu trong lịch sử)
+                $idxA=(float)($a['___idx']??0); $idxB=(float)($b['___idx']??0); return $idxA<=>$idxB;
             });
 
             // Dữ liệu bắt đầu từ dòng 9 vì template đã có header cột ở dòng 8
@@ -187,7 +187,7 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
                     $loaiHang = ($kl > 0) ? (string)($r['loai_hang'] ?? '') : '';
                 }
 
-                $fuelDisplay = (int)round($fuel);
+                $fuelDisplay = (int)floor($fuel);
                 $sheet->setCellValueByColumnAndRow(1,$currentRow,$stt);
                 $sheet->setCellValueByColumnAndRow(2,$currentRow,$soChuyenDisplay);
                 // KLVC: Giữ phần thập phân, format #,##0.00
@@ -273,9 +273,19 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
                         $receiptEntries[] = ['label' => $label, 'date' => $ngay, 'amount' => $soLuong];
                     }
                 } elseif ($loai === 'tinh_chinh') {
-                    // Fix #4,#12,#15: Bỏ tinh chỉnh khỏi báo cáo Excel
-                    // Tinh chỉnh chỉ ảnh hưởng đến dầu tồn, không hiển thị trong báo cáo chi tiết
-                    // (bỏ không thêm vào receiptEntries)
+                    // Phân biệt: Chuyển dầu (có transfer_pair_id) vs Tinh chỉnh thủ công (không có)
+                    $transferPairId = trim((string)($gd['transfer_pair_id'] ?? ''));
+                    $soLuong = (float)($gd['so_luong_lit'] ?? 0);
+                    if ($soLuong !== 0.0) {
+                        if ($transferPairId !== '') {
+                            // Đây là chuyển dầu → HIỂN THỊ trong báo cáo
+                            $label = trim((string)($gd['ly_do'] ?? 'Chuyển dầu'));
+                            $receiptEntries[] = ['label' => $label, 'date' => $ngay, 'amount' => $soLuong];
+                        } else {
+                            // Đây là tinh chỉnh thủ công → BỎ QUA (không hiển thị)
+                            // Tinh chỉnh chỉ ảnh hưởng đến dầu tồn qua tinhSoDu(), không hiển thị chi tiết trong báo cáo
+                        }
+                    }
                 }
             }
             usort($receiptEntries, function($a,$b){ return strcmp($a['date'],$b['date']); });
@@ -286,7 +296,7 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
             $sheet->setCellValueByColumnAndRow(5,$currentRow,'Bảng tính ngày');
             $sheet->setCellValueByColumnAndRow(6,$currentRow,$ngayBangTinhVN);
             if ($notaiAmountOverride !== '') {
-                $tonDau = (float)round((float)str_replace(',','.', $notaiAmountOverride));
+                $tonDau = (float)floor((float)str_replace(',','.', $notaiAmountOverride));
                 setIntHelper($sheet,7,$currentRow,$tonDau);
             } else {
                 setIntHelper($sheet,7,$currentRow,$tonDau);
@@ -305,7 +315,7 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
                 $sheet->setCellValueByColumnAndRow(4,$currentRow,'Nhận dầu tại');
                 $sheet->setCellValueByColumnAndRow(5,$currentRow,(string)$rc['label']);
                 $sheet->setCellValueByColumnAndRow(6,$currentRow,format_date_vn((string)$rc['date']));
-                $valInt = (int)round((float)$rc['amount']);
+                $valInt = (int)floor((float)$rc['amount']);
                 setIntHelper($sheet,7,$currentRow,$valInt);
                 $sheet->getStyle("A{$currentRow}:I{$currentRow}")->applyFromArray([
                     'alignment'=>['vertical'=>Alignment::VERTICAL_CENTER,'wrapText'=>true]
@@ -319,7 +329,7 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
             // Row: Cộng:
             // Theo mẫu: "Cộng:" (cột E), số (cột G - căn phải)
             $sheet->setCellValueByColumnAndRow(5,$currentRow,'Cộng:');
-            $tongNoNhan = (int)round($tonDau) + (int)$sumReceiptsInt;
+            $tongNoNhan = (int)floor($tonDau) + (int)$sumReceiptsInt;
             setIntHelper($sheet,7,$currentRow,$tongNoNhan);
             $sheet->getStyle("A{$currentRow}:I{$currentRow}")->applyFromArray([
                 'font'=>['bold'=>true],
@@ -337,7 +347,7 @@ function exportLichSuFull($groups, $currentMonth, $currentYear, $isDetailedExpor
             $dateForReport = date('Y-m-d'); // Ngày hiện tại
             $monthEndVN  = format_date_vn($dateForReport);
             // Tồn cuối = (Nợ tại + Nhận dầu) - Tổng dầu sử dụng hiển thị
-            $tonCuoi = (int)round($tongNoNhan - (int)$sumFuel);
+            $tonCuoi = (int)floor($tongNoNhan - (int)$sumFuel);
             // Theo mẫu: "Dầu tồn trên sà lan đến ngày" (cột D-E merged), ngày (cột F), số (cột G - căn phải), "Lít" (cột H)
             // Merge D:E để text dài không bị cắt, giữ F riêng cho ngày
             $sheet->mergeCells("D{$currentRow}:E{$currentRow}");
@@ -476,81 +486,18 @@ function createDAUTONSheet($spreadsheet, $templatePath, $rowsInGroup, $currentMo
         $sheet->setCellValue('A6', $titleText); // Tiêu đề động được ghi vào dòng 6
 
         $defaultCellStyle = ['borders' => [ 'allBorders' => ['borderStyle' => Border::BORDER_THIN] ], 'alignment' => [ 'vertical' => Alignment::VERTICAL_CENTER, 'wrapText' => true ] ];
-        
-        // Sắp xếp dữ liệu
-        // Helper function để parse ngày thành ISO format
-        $parseDateToIso = function($dateStr) {
-            if (empty($dateStr)) return '';
-            $iso = parse_date_vn($dateStr);
-            if (!$iso && preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateStr)) {
-                // Nếu đã là ISO format, dùng trực tiếp
-                $iso = $dateStr;
-            }
-            return $iso ?: '';
-        };
-        
-        usort($rowsInGroup, function($a, $b) use ($parseDateToIso) {
+
+        // Sắp xếp dữ liệu: theo tên tàu, rồi theo ___idx (thứ tự lưu trong lịch sử)
+        // Giữ nguyên thứ tự đã lưu để khớp với trang lịch sử
+        usort($rowsInGroup, function($a, $b) {
             // 1. Tên tàu
             $ta = mb_strtolower(trim($a['ten_phuong_tien'] ?? ''));
             $tb = mb_strtolower(trim($b['ten_phuong_tien'] ?? ''));
             if ($ta !== $tb) return $ta <=> $tb;
-            
-            // 2. Xác định loại: chuyến thường (0), cấp thêm (1), chuyển dầu (2)
-            $capThemA = (int)($a['cap_them'] ?? 0);
-            $capThemB = (int)($b['cap_them'] ?? 0);
-            $isCapThemA = ($capThemA === 1);
-            $isChuyenDauA = ($capThemA === 2);
-            $isCapThemB = ($capThemB === 1);
-            $isChuyenDauB = ($capThemB === 2);
-            
-            // 3. Nếu cả hai đều là cấp thêm hoặc chuyển dầu: sắp xếp theo ngày
-            if (($isCapThemA || $isChuyenDauA) && ($isCapThemB || $isChuyenDauB)) {
-                $dateA = '';
-                if ($isCapThemA) {
-                    $dateA = $parseDateToIso($a['ngay_di'] ?? '');
-                } elseif ($isChuyenDauA) {
-                    $dateA = $parseDateToIso($a['ngay_do_xong'] ?? '') ?: $parseDateToIso($a['ngay_di'] ?? '');
-                }
-                $dateB = '';
-                if ($isCapThemB) {
-                    $dateB = $parseDateToIso($b['ngay_di'] ?? '');
-                } elseif ($isChuyenDauB) {
-                    $dateB = $parseDateToIso($b['ngay_do_xong'] ?? '') ?: $parseDateToIso($b['ngay_di'] ?? '');
-                }
-                if ($dateA !== $dateB) return strcmp($dateA, $dateB);
-                // Nếu cùng ngày, sắp xếp theo ___idx
-                $idxA = (float)($a['___idx'] ?? 0);
-                $idxB = (float)($b['___idx'] ?? 0);
-                return $idxA <=> $idxB;
-            }
-            
-            // 4. Nếu một trong hai là cấp thêm/chuyển dầu, một là chuyến thường: sắp xếp theo ngày
-            if ($isCapThemA || $isChuyenDauA) {
-                // A là cấp thêm/chuyển dầu
-                $dateA = $isCapThemA ? $parseDateToIso($a['ngay_di'] ?? '') : ($parseDateToIso($a['ngay_do_xong'] ?? '') ?: $parseDateToIso($a['ngay_di'] ?? ''));
-                $dateB = $parseDateToIso($b['ngay_do_xong'] ?? '') ?: $parseDateToIso($b['ngay_di'] ?? '');
-                if ($dateA !== $dateB) return strcmp($dateA, $dateB);
-                // Nếu cùng ngày, cấp thêm/chuyển dầu đặt sau chuyến thường
-                return 1;
-            }
-            
-            if ($isCapThemB || $isChuyenDauB) {
-                // B là cấp thêm/chuyển dầu
-                $dateA = $parseDateToIso($a['ngay_do_xong'] ?? '') ?: $parseDateToIso($a['ngay_di'] ?? '');
-                $dateB = $isCapThemB ? $parseDateToIso($b['ngay_di'] ?? '') : ($parseDateToIso($b['ngay_do_xong'] ?? '') ?: $parseDateToIso($b['ngay_di'] ?? ''));
-                if ($dateA !== $dateB) return strcmp($dateA, $dateB);
-                // Nếu cùng ngày, cấp thêm/chuyển dầu đặt sau chuyến thường
-                return -1;
-            }
-            
-            // 5. Cả hai đều là chuyến thường: sắp xếp theo số chuyến
-            $tripA = intval($a['so_chuyen'] ?? 0);
-            $tripB = intval($b['so_chuyen'] ?? 0);
-            if ($tripA !== $tripB) return $tripA <=> $tripB;
-            
-            // 6. Cùng số chuyến: sắp xếp theo ___idx
-            $idxA = intval($a['___idx'] ?? 0);
-            $idxB = intval($b['___idx'] ?? 0);
+
+            // 2. Giữ nguyên thứ tự theo ___idx (thứ tự đã lưu trong lịch sử)
+            $idxA = (float)($a['___idx'] ?? 0);
+            $idxB = (float)($b['___idx'] ?? 0);
             return $idxA <=> $idxB;
         });
 
@@ -620,10 +567,10 @@ function createDAUTONSheet($spreadsheet, $templatePath, $rowsInGroup, $currentMo
                 $ngayCapThem = !empty($row['ngay_di']) ? format_date_vn($row['ngay_di']) : '';
                 $sheet->setCellValueByColumnAndRow(16,$currentRow,$ngayCapThem); // NGÀY ĐI cột P (16)
                 setIntHelper($sheet,15,$currentRow,$litInt); // DẦU SD cột O (15)
-                // Cấp thêm mặc định 0km → Ghi vào cột <80km (cột V, index 22)
-                setIntHelper($sheet,22,$currentRow,$litInt,true); // GHI VÀO CELL cột V (<80km)
+                // Cấp thêm không có cự ly → Mặc định gán vào cột <80km (cột V = 22)
+                setIntHelper($sheet,22,$currentRow,$litInt,true); // <80km cột V (22) - hiển thị '-' nếu = 0
                 $subtotal[15]+=$litInt; // DẦU SD index (cột O)
-                $subtotal[22]+=$litInt; // Cộng vào bucket <80km (cột V) vì cấp thêm mặc định 0km
+                $subtotal[22]+=$litInt; // <80km (cột V)
                 $sheet->getStyle("A{$currentRow}:X{$currentRow}")->applyFromArray($defaultCellStyle);
                 $currentRow++;
                 continue;
@@ -848,10 +795,10 @@ function createDAUTONSheet($spreadsheet, $templatePath, $rowsInGroup, $currentMo
 
                 if($isCapThem){
                     $litVal=(float)($row['dau_tinh_toan_lit'] ?? ($row['so_luong_cap_them_lit']??0)); $litInt=toIntHelper($litVal);
-                    $subtotal[9]+=$litInt;
-                    $tot=toIntHelper($row['cu_ly_khong_hang_km']??0)+toIntHelper($row['cu_ly_co_hang_km']??0);
-                    $v1=($tot>0 && $tot<80)?$litInt:0; $v2=($tot>=80 && $tot<=200)?$litInt:0; $v3=($tot>200)?$litInt:0;
-                    $subtotal[10]+=$v1; $subtotal[11]+=$v2; $subtotal[12]+=$v3;
+                    $subtotal[7]+=$litInt; // DẦU SỬ DỤNG KHÔNG HÀNG (cấp thêm không có hàng)
+                    $subtotal[9]+=$litInt; // Tổng dầu SD
+                    // Cấp thêm không có cự ly → Mặc định gán vào cột <80km
+                    $subtotal[10]+=$litInt; // <80km
                     continue;
                 }
 

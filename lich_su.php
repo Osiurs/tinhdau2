@@ -585,8 +585,10 @@ $__lhAll = $__lhModel->getAll();
 $loaiHangOptions = array_values(array_map(function($r){ return (string)($r['ten_loai_hang'] ?? ''); }, $__lhAll));
 sort($loaiHangOptions, SORT_NATURAL | SORT_FLAG_CASE);
 
-// Xuất Excel theo bộ lọc hiện tại
-if ((isset($_GET['export']) && $_GET['export'] === 'excel') && !isset($_GET['filter'])) {
+// Xuất Excel theo bộ lọc hiện tại - HỖ TRỢ CẢ GET VÀ POST
+$exportValue = $_GET['export'] ?? $_POST['export'] ?? '';
+$filterValue = $_GET['filter'] ?? $_POST['filter'] ?? '';
+if (($exportValue === 'excel') && empty($filterValue)) {
     // Bảo đảm không có dữ liệu nào đã đẩy ra trước khi in XML (tránh hỏng cấu trúc Workbook)
     if (function_exists('ob_get_level')) {
         while (ob_get_level() > 0) { @ob_end_clean(); }
@@ -670,7 +672,8 @@ if ((isset($_GET['export']) && $_GET['export'] === 'excel') && !isset($_GET['fil
     // để có thể sử dụng trong logic filter đặc biệt cho IN TINH DAU
 
     // Nếu yêu cầu xuất XLSX với template (logo/header chuẩn)
-    if (isset($_GET['xlsx']) && $_GET['xlsx'] == '1') {
+    $xlsxValue = $_GET['xlsx'] ?? $_POST['xlsx'] ?? '';
+    if ($xlsxValue == '1') {
         // Dọn sạch mọi buffer/echo trước khi gửi file nhị phân
         if (function_exists('ob_get_level')) {
             while (ob_get_level() > 0) { @ob_end_clean(); }
@@ -2489,7 +2492,12 @@ include 'includes/header.php';
                                             <?php endforeach; ?>
                                         </div>
                                         <!-- Wizard nhập tuần tự theo từng tàu -->
-                                        <div id="detailWizard" class="border rounded p-3 mt-3" style="display:none;">
+                                        <div id="detailWizard" class="border rounded p-3 mt-3 bg-light" style="display:none;">
+                                            <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                <strong>Nhập thông tin dầu tồn cho từng tàu</strong> hoặc bấm <strong>Skip</strong> để bỏ qua, <strong>Dùng cho tất cả</strong> để áp dụng giá trị cho tất cả tàu còn lại.
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
                                             <div class="d-flex align-items-center mb-2">
                                                 <i class="fas fa-ship me-2 text-primary"></i>
                                                 <div class="fw-semibold">Tàu: <span id="wizardShipName"></span></div>
@@ -2790,7 +2798,7 @@ try {
                         <td><?php echo htmlspecialchars((string)($r['so_chuyen'] ?? '')); ?></td>
                         <td>
                             <?php if ($isCapThem): ?>
-                                <span class="badge bg-warning text-dark"></span>
+                                <span class="badge bg-warning text-dark">Cấp thêm</span>
                             <?php elseif ($isChuyenDau): ?>
                                 <?php if ($r['is_chuyen_out'] ?? false): ?>
                                     <span class="badge bg-dark">Chuyển dầu → <?php echo htmlspecialchars($r['tau_dich'] ?? ''); ?></span>
@@ -2803,7 +2811,17 @@ try {
                         </td>
                         <td>
                             <?php if ($isCapThem): ?>
-                                <span class="text-muted"></span>
+                                <?php
+                                    // Hiển thị lý do cấp thêm (lý do tiêu hao)
+                                    $lyDoCapThem = trim((string)($r['ly_do_cap_them'] ?? ''));
+                                    // Xóa prefix "CẤP THÊM:" nếu có
+                                    $lyDoCapThem = preg_replace('/^CẤP THÊM:\s*/i', '', $lyDoCapThem);
+                                    if (!empty($lyDoCapThem)) {
+                                        echo  htmlspecialchars($lyDoCapThem);
+                                    } else {
+                                        echo '<span class="text-muted">—</span>';
+                                    }
+                                ?>
                             <?php elseif ($isChuyenDau): ?>
                                 <?php 
                                     $dir = ($r['is_chuyen_out'] ?? false) ? 'out' : 'in';
@@ -2834,17 +2852,30 @@ try {
                                                     $doiLenhData = @json_decode($doiLenhTuyenJson, true);
                                                     if (is_array($doiLenhData) && !empty($doiLenhData)) {
                                                         // Xây dựng route từ dữ liệu JSON
+                                                        // Logic: Lý do thêm điểm mới thuộc về điểm TRƯỚC đó
+                                                        // Ví dụ: A → B, thêm C với lý do "Đổi lệnh" => A → B (Đổi lệnh) → C
                                                         $segments = [];
                                                         if ($diemDi !== '') $segments[] = $diemDi;
-                                                        if ($diemDuKien !== '') $segments[] = $diemDuKien;
-                                                        foreach ($doiLenhData as $entry) {
+
+                                                        // Điểm B (diemDuKien) - lý do của điểm mới đầu tiên gán cho B
+                                                        $doiLenhArray = array_values($doiLenhData);
+                                                        $bLabel = $diemDuKien;
+                                                        if (!empty($doiLenhArray[0]['reason'])) {
+                                                            $bLabel .= ' (' . $doiLenhArray[0]['reason'] . ')';
+                                                        }
+                                                        if ($bLabel !== '') $segments[] = $bLabel;
+
+                                                        // Các điểm mới (C, D, E...): lý do của điểm tiếp theo gán cho điểm hiện tại
+                                                        $totalPoints = count($doiLenhArray);
+                                                        for ($i = 0; $i < $totalPoints; $i++) {
+                                                            $entry = $doiLenhArray[$i];
                                                             if (is_array($entry) && isset($entry['point'])) {
-                                                                $label = $entry['point'];
-                                                                $parts = [];
-                                                                if (!empty($entry['reason'])) $parts[] = $entry['reason'];
-                                                                if (!empty($entry['note'])) $parts[] = $entry['note'];
-                                                                if (!empty($parts)) {
-                                                                    $label .= ' (' . implode(' – ', $parts) . ')';
+                                                                $label = trim($entry['point']);
+                                                                if ($label === '') continue;
+
+                                                                // Lý do của điểm tiếp theo (nếu có) gán cho điểm hiện tại
+                                                                if (isset($doiLenhArray[$i + 1]) && !empty($doiLenhArray[$i + 1]['reason'])) {
+                                                                    $label .= ' (' . $doiLenhArray[$i + 1]['reason'] . ')';
                                                                 }
                                                                 $segments[] = $label;
                                                             }
@@ -3020,6 +3051,10 @@ try {
                 <div class="mb-3">
                   <label class="form-label">Lý do cấp thêm</label>
                   <input type="text" class="form-control" name="ly_do_cap_them" id="edit_ly_do_cap_them">
+                  <div class="mt-1">
+                    <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFillEdit('edit_ly_do_cap_them', 'Đổi lệnh')">Đổi lệnh</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="quickFillEdit('edit_ly_do_cap_them', 'Lãnh vật tư')">Lãnh vật tư</button>
+                  </div>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Số lượng cấp thêm (Lít)</label>
@@ -3175,6 +3210,10 @@ try {
                     <div class="mb-3">
                       <label class="form-label">Lý do thêm <span class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="new_destination_point_reason" placeholder="Nhập lý do thêm điểm này...">
+                      <div class="mt-1">
+                        <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFillEdit('new_destination_point_reason', 'Đổi lệnh')">Đổi lệnh</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="quickFillEdit('new_destination_point_reason', 'Lãnh vật tư')">Lãnh vật tư</button>
+                      </div>
                       <div class="form-text">Ví dụ: Đổi lệnh, Lãnh vật tư, ...</div>
                     </div>
                     <div class="d-flex gap-2">
@@ -3201,8 +3240,12 @@ try {
                       </div>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label">Lý do sửa <span class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="edit_point_reason" placeholder="Nhập lý do sửa điểm này...">
+                      <label class="form-label">Lý do sửa</label>
+                      <input type="text" class="form-control" id="edit_point_reason" placeholder="Nhập lý do (nếu có)...">
+                      <div class="mt-1">
+                        <button type="button" class="btn btn-primary btn-sm me-1" onclick="quickFillEdit('edit_point_reason', 'Đổi lệnh')">Đổi lệnh</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="quickFillEdit('edit_point_reason', 'Lãnh vật tư')">Lãnh vật tư</button>
+                      </div>
                     </div>
                     <div class="d-flex gap-2">
                       <button type="button" class="btn btn-success btn-sm" onclick="saveEditPoint()">
@@ -3276,6 +3319,16 @@ try {
   </div>
 </div>
 
+<!-- Hàm điền nhanh cho modal edit -->
+<script>
+function quickFillEdit(inputId, value) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = value;
+        input.focus();
+    }
+}
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -3828,6 +3881,14 @@ document.addEventListener('DOMContentLoaded', function(){
     isManualDistance: false
   };
 
+  function syncReasonChain() {
+    if (routeState.newDestinations.length > 0) {
+      routeState.diemBReason = routeState.newDestinations[0].reason || '';
+    } else if (routeState.newDestinations.length === 0 && !routeState.diemBReason) {
+      routeState.diemBReason = '';
+    }
+  }
+
   // Load route data when edit modal is opened
   var editModal = document.getElementById('editModal');
   if (editModal) {
@@ -3861,14 +3922,27 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       // Helper function to parse điểm với lý do: "Tên (lý do)" -> {name: "Tên", reason: "lý do"}
+      // ❌ KHÔNG strip ngoặc nữa vì:
+      // 1. Ngoặc có thể là phần của tên gốc (như "BMT Cần Thơ (Cái Cui)")
+      // 2. Backend đã có variants logic để xử lý so sánh linh hoạt
+      // 3. Chỉ strip ngoặc cuối nếu chắc chắn là ghi chú người dùng thêm (nhiều hơn 1 cặp ngoặc)
       function parseDiemWithReason(diemStr) {
-        var match = diemStr.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
-        if (match) {
-          return {
-            name: match[1].trim(),
-            reason: match[2].trim()
-          };
+        // Đếm số cặp ngoặc
+        var openCount = (diemStr.match(/\(/g) || []).length;
+        var closeCount = (diemStr.match(/\)/g) || []).length;
+
+        // Nếu có nhiều hơn 1 cặp ngoặc hoàn chỉnh → tách cặp CUỐI làm ghi chú
+        if (openCount > 1 && openCount === closeCount) {
+          var match = diemStr.match(/^(.+)\s*\(([^)]+)\)\s*$/);
+          if (match) {
+            return {
+              name: match[1].trim(),
+              reason: match[2].trim()
+            };
+          }
         }
+
+        // Giữ nguyên tên đầy đủ (bao gồm cả ngoặc gốc)
         return {
           name: diemStr.trim(),
           reason: ''
@@ -3913,6 +3987,8 @@ document.addEventListener('DOMContentLoaded', function(){
         routeState.newDestinations = [];
       }
 
+      syncReasonChain();
+
       routeState.khoangCach = khoangCach;
       routeState.isManualDistance = (routeState.newDestinations.length > 0);
 
@@ -3947,12 +4023,19 @@ document.addEventListener('DOMContentLoaded', function(){
       diemDauInput.value = diemDauDisplay;
     }
 
-    // Update điểm B (điểm kết thúc dự kiến) - hiển thị với lý do nếu có
+    // Update điểm B (điểm kết thúc dự kiến)
+    // Logic mới: Lý do của điểm C đầu tiên sẽ gán cho điểm B
     var diemBInput = document.getElementById('edit_route_diem_B');
     if (diemBInput) {
       var diemBDisplay = routeState.diemB;
-      if (routeState.diemBReason) {
-        diemBDisplay += ' (' + routeState.diemBReason + ')';
+      var reasonForB = '';
+      if (routeState.newDestinations.length > 0 && routeState.newDestinations[0].reason) {
+        reasonForB = routeState.newDestinations[0].reason;
+      } else if (routeState.diemBReason) {
+        reasonForB = routeState.diemBReason;
+      }
+      if (reasonForB) {
+        diemBDisplay += ' (' + reasonForB + ')';
       }
       diemBInput.value = diemBDisplay;
     }
@@ -3969,8 +4052,8 @@ document.addEventListener('DOMContentLoaded', function(){
       var lastDest = routeState.newDestinations[routeState.newDestinations.length - 1];
       if (actualEndSection) actualEndSection.style.display = 'block';
       if (diemCuoiInput) {
+        // Điểm cuối KHÔNG hiển thị lý do (vì lý do thuộc về điểm trước đó)
         var diemCuoiDisplay = lastDest.name;
-        if (lastDest.reason) diemCuoiDisplay += ' (' + lastDest.reason + ')';
         diemCuoiInput.value = diemCuoiDisplay;
       }
 
@@ -4028,7 +4111,12 @@ document.addEventListener('DOMContentLoaded', function(){
     pointsToShow.forEach(function(point, index) {
       var letter = String.fromCharCode(67 + index); // C=67, D=68, E=69, ...
       var displayName = point.name;
-      if (point.reason) displayName += ' (' + escapeHtml(point.reason) + ')';
+      // Logic mới: Lý do của điểm TIẾP THEO sẽ hiển thị trên điểm hiện tại
+      // Ví dụ: A → B (Đổi lệnh) → C thì "Đổi lệnh" là lý do của C nhưng hiển thị trên B
+      var nextPointIndex = index + 1; // Index trong newDestinations (không phải pointsToShow)
+      if (nextPointIndex < routeState.newDestinations.length && routeState.newDestinations[nextPointIndex].reason) {
+        displayName += ' (' + escapeHtml(routeState.newDestinations[nextPointIndex].reason) + ')';
+      }
       if (point.note) displayName += ' （' + escapeHtml(point.note) + '）';
 
       html += '<div class="mb-3 border rounded p-2 bg-warning bg-opacity-10 border-warning">';
@@ -4237,6 +4325,8 @@ document.addEventListener('DOMContentLoaded', function(){
       note: ''
     });
 
+    syncReasonChain();
+
     // Clear distance when adding new destination - user must enter manually
     routeState.khoangCach = 0;
     routeState.isManualDistance = true;
@@ -4258,6 +4348,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Remove the point at the specified index
     routeState.newDestinations.splice(index, 1);
+
+    syncReasonChain();
 
     // If no new destinations left (back to 2 points A → B), restore auto distance mode
     if (routeState.newDestinations.length === 0) {
@@ -4337,6 +4429,8 @@ document.addEventListener('DOMContentLoaded', function(){
       reason: reason,
       note: routeState.newDestinations[index].note || ''
     };
+
+    syncReasonChain();
 
     // Update hidden inputs
     updateRouteHiddenInputs();
@@ -4451,11 +4545,6 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
 
-    if (!reason) {
-      alert('Vui lòng nhập lý do sửa điểm này!');
-      return;
-    }
-
     // Update state based on type
     if (type === 'diem_dau') {
       routeState.diemDau = newName;
@@ -4490,7 +4579,7 @@ document.addEventListener('DOMContentLoaded', function(){
     cancelEditPoint();
 
     // Log reason (for audit trail)
-    console.log('Đã sửa ' + type + ' thành "' + newName + '". Lý do: ' + reason);
+    console.log('Đã sửa ' + type + ' thành "' + newName + '". Lý do: ' + (reason || ''));
   };
 
   // Function to update hidden inputs from routeState
@@ -4555,23 +4644,42 @@ document.addEventListener('DOMContentLoaded', function(){
       routeParts.push(diemDauLabel);
     }
 
-    // Điểm B
+    // Chuỗi các điểm sau A gồm B và các điểm thêm (C, D, ...)
+    var subsequentPoints = [];
     if (routeState.diemB) {
-      var diemBLabel = routeState.diemB;
-      if (routeState.diemBReason) {
-        diemBLabel += ' (' + routeState.diemBReason + ')';
-      }
-      routeParts.push(diemBLabel);
-    }
-
-    // Các điểm đến mới (C, D, E...)
-    if (routeState.newDestinations && routeState.newDestinations.length > 0) {
-      routeState.newDestinations.forEach(function(item) {
-        var label = item.name;
-        if (item.reason) label += ' (' + item.reason + ')';
-        routeParts.push(label);
+      subsequentPoints.push({
+        name: routeState.diemB,
+        reason: routeState.diemBReason || ''
       });
     }
+    if (routeState.newDestinations && routeState.newDestinations.length > 0) {
+      routeState.newDestinations.forEach(function(item) {
+        subsequentPoints.push({
+          name: item.name,
+          reason: item.reason || '',
+          note: item.note || ''
+        });
+      });
+    }
+
+    subsequentPoints.forEach(function(point, index) {
+      var label = point.name;
+      var nextPoint = subsequentPoints[index + 1];
+      var reasonToApply = '';
+
+      if (nextPoint && nextPoint.reason) {
+        // Lý do của điểm tiếp theo gán cho điểm hiện tại
+        reasonToApply = nextPoint.reason;
+      } else if (!nextPoint && subsequentPoints.length === 1 && point.reason) {
+        // Không có điểm mới nào: giữ nguyên lý do của chính điểm B
+        reasonToApply = point.reason;
+      }
+
+      if (reasonToApply) {
+        label += ' (' + reasonToApply + ')';
+      }
+      routeParts.push(label);
+    });
 
     var routeHienThi = routeParts.join(' → ');
     document.getElementById('edit_route_hien_thi_hidden').value = routeHienThi;
