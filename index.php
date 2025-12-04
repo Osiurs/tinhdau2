@@ -1319,14 +1319,6 @@ include 'includes/header.php';
                                     const changeEvent = new Event('change', { bubbles: true });
                                     selectedRadio.dispatchEvent(changeEvent);
                                 }
-
-                                // Focus vào ô địa điểm hoặc lý do tùy loại
-                                if (selectedRadio && selectedRadio.value === 'khac') {
-                                    const lyDoKhacInput = document.getElementById('ly_do_cap_them_khac');
-                                    if (lyDoKhacInput) lyDoKhacInput.focus();
-                                } else if (diaDiemInput) {
-                                    diaDiemInput.focus();
-                                }
                             }, 150);
                         } else {
                             card.style.display = 'none';
