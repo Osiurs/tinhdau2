@@ -1676,11 +1676,8 @@ include 'includes/header.php';
 
                         updateCapThemPreview();
 
-                        // Auto-show form cấp thêm nếu có dữ liệu
-                        const capThemValue = document.getElementById('cap_them').value;
-                        const soLuongValue = document.getElementById('so_luong_cap_them').value;
+                        // Auto-show form cấp thêm nếu có dữ liệu (reuse variables đã khai báo ở trên)
                         if (capThemValue == '1' || (soLuongValue && parseFloat(soLuongValue) > 0)) {
-                            const toggleCheckbox = document.getElementById('toggle_cap_them');
                             if (toggleCheckbox) {
                                 toggleCheckbox.checked = true;
                                 toggleCapThemForm(true);
