@@ -1294,13 +1294,14 @@ include 'includes/header.php';
                         const soLuongInput = document.getElementById('so_luong_cap_them');
                         const diaDiemInput = document.getElementById('dia_diem_cap_them');
                         const lyDoDisplayInput = document.getElementById('ly_do_cap_them_display');
+                        const lyDoKhacInput = document.getElementById('ly_do_cap_them_khac');
 
                         if (show) {
                             card.style.display = 'block';
                             // Set cap_them = 1 khi hiện form (user đã bật toggle)
                             if (capThemHidden) capThemHidden.value = '1';
 
-                            // Đảm bảo các inputs KHÔNG bị disabled
+                            // Đảm bảo các inputs KHÔNG bị disabled và có thể validate
                             if (diaDiemInput) {
                                 diaDiemInput.disabled = false;
                                 diaDiemInput.removeAttribute('disabled');
@@ -1313,6 +1314,10 @@ include 'includes/header.php';
                                 lyDoDisplayInput.disabled = false;
                                 lyDoDisplayInput.removeAttribute('disabled');
                             }
+                            if (lyDoKhacInput) {
+                                lyDoKhacInput.disabled = false;
+                                lyDoKhacInput.removeAttribute('disabled');
+                            }
 
                             // Trigger change event để hiển thị đúng form fields dựa trên loại được chọn
                             setTimeout(function() {
@@ -1324,11 +1329,26 @@ include 'includes/header.php';
                             }, 150);
                         } else {
                             card.style.display = 'none';
-                            // Reset giá trị khi ẩn (cap_them = 0)
+                            // Reset giá trị khi ẩn (cap_them = 0) và DISABLE inputs để tránh validation
                             if (capThemHidden) capThemHidden.value = '0';
-                            if (soLuongInput) soLuongInput.value = '';
-                            if (diaDiemInput) diaDiemInput.value = '';
-                            if (lyDoDisplayInput) lyDoDisplayInput.value = '';
+
+                            // Disable và reset value để tránh lỗi "invalid form control is not focusable"
+                            if (soLuongInput) {
+                                soLuongInput.value = '';  // Xóa value để không vi phạm min="0.01"
+                                soLuongInput.disabled = true;  // Disable để skip validation
+                            }
+                            if (diaDiemInput) {
+                                diaDiemInput.value = '';
+                                diaDiemInput.disabled = true;
+                            }
+                            if (lyDoDisplayInput) {
+                                lyDoDisplayInput.value = '';
+                                lyDoDisplayInput.disabled = true;
+                            }
+                            if (lyDoKhacInput) {
+                                lyDoKhacInput.value = '';
+                                lyDoKhacInput.disabled = true;
+                            }
                         }
                     }
 
