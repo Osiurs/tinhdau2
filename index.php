@@ -466,9 +466,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents('debug_log.txt', "[POST] Processing action: {$action}.\n", FILE_APPEND);
         if ($action === 'save') {
             // Debug dữ liệu ngay trước khi lưu
-            error_log('DEBUG SAVE ACTION: Data to be saved (Tinh toan): ' . print_r($dataLuuTinhToan, true));
+            error_log('DEBUG SAVE ACTION: $ketQua exists: ' . ($ketQua ? 'YES' : 'NO'));
+            error_log('DEBUG SAVE ACTION: $ketQuaCapThem exists: ' . ($ketQuaCapThem ? 'YES' : 'NO'));
+            error_log('DEBUG SAVE ACTION: $dataLuuTinhToan exists: ' . ($dataLuuTinhToan ? 'YES' : 'NO'));
+            error_log('DEBUG SAVE ACTION: $dataLuuCapThem exists: ' . ($dataLuuCapThem ? 'YES' : 'NO'));
             if ($dataLuuCapThem) {
                 error_log('DEBUG SAVE ACTION: Data to be saved (Cap them): ' . print_r($dataLuuCapThem, true));
+            } else {
+                error_log('DEBUG SAVE ACTION: $dataLuuCapThem is NULL! $capThem=' . $capThem . ', $soLuongCapThem=' . $soLuongCapThem);
             }
 
             file_put_contents('debug_log.txt', "[POST] Attempting to save data...\n", FILE_APPEND);
@@ -1196,7 +1201,7 @@ include 'includes/header.php';
                             <strong>Cấp thêm (tùy chọn)</strong>
                         </div>
                         <div class="card-body">
-                            <input type="hidden" id="cap_them" name="cap_them" value="0">
+                            <input type="hidden" id="cap_them" name="cap_them" value="<?php echo $formData['cap_them'] ?? 0; ?>">
                         <div class="mb-3">
                             <label class="form-label">Loại <span class="text-danger">*</span></label>
                             <div>
@@ -1601,6 +1606,17 @@ include 'includes/header.php';
                         }
 
                         updateCapThemPreview();
+
+                        // Auto-show form cấp thêm nếu có dữ liệu
+                        const capThemValue = document.getElementById('cap_them').value;
+                        const soLuongValue = document.getElementById('so_luong_cap_them').value;
+                        if (capThemValue == '1' || (soLuongValue && parseFloat(soLuongValue) > 0)) {
+                            const toggleCheckbox = document.getElementById('toggle_cap_them');
+                            if (toggleCheckbox) {
+                                toggleCheckbox.checked = true;
+                                toggleCapThemForm(true);
+                            }
+                        }
 
                         // Watchdog: Đảm bảo inputs trong form cấp thêm LUÔN enabled (check mỗi 300ms)
                         setInterval(function() {
